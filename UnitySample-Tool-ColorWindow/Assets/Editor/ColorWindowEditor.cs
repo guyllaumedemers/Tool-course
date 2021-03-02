@@ -23,7 +23,12 @@ public class ColorWindow : EditorWindow
     Color selectedColor = Color.white;
     Color eraseColor = Color.white;
 
-    private readonly float MAX_RGBA_VALUE = 1;
+    public delegate void MyDelegate(Color color);
+    public MyDelegate myDelegate;
+
+    private readonly float MAX_RGBA_VALUE = 1.0f;
+    private readonly float MIN_RGBA_VALUE = 0.0f;
+    private readonly int NUMBER_DECIMAL = 2;
     private readonly float CLAMP_OFFSET = 0.01f;
 
     public void OnEnable()
@@ -32,6 +37,18 @@ public class ColorWindow : EditorWindow
         for (int i = 0; i < colors.Length; i++)
             colors[i] = GetRandomColor();
         colorTexture = EditorGUIUtility.whiteTexture;
+        myDelegate += AddRandomRGBA;
+    }
+
+    private Color GetColor
+    {
+        get => selectedColor;
+        set
+        {
+            if (selectedColor == value)
+                return;
+            myDelegate.Invoke(selectedColor);
+        }
     }
 
     private Color GetRandomColor()  //Built a get random color tool
@@ -39,16 +56,34 @@ public class ColorWindow : EditorWindow
         return new Color(UnityEngine.Random.value, UnityEngine.Random.value, UnityEngine.Random.value, 1f);
     }
 
+    /// <summary>
+    /// Could have use Mathf.Clamp but I like mine better
+    /// </summary>
     private void GetRGBAFields()
     {
-        float clampR = selectedColor.r < 0 ? 0 : selectedColor.r % MAX_RGBA_VALUE;
-        float clampG = selectedColor.g < 0 ? 0 : selectedColor.g % MAX_RGBA_VALUE;
-        float clampB = selectedColor.b < 0 ? 0 : selectedColor.b % MAX_RGBA_VALUE;
-        float clampA = selectedColor.a < 0 ? 0 : selectedColor.a % MAX_RGBA_VALUE;
-        selectedColor.r = EditorGUILayout.FloatField(new GUIContent("R"), selectedColor.r > MAX_RGBA_VALUE - CLAMP_OFFSET ? MAX_RGBA_VALUE : (float)Math.Round(clampR, 2));
-        selectedColor.g = EditorGUILayout.FloatField(new GUIContent("G"), selectedColor.g > MAX_RGBA_VALUE - CLAMP_OFFSET ? MAX_RGBA_VALUE : (float)Math.Round(clampG, 2));
-        selectedColor.b = EditorGUILayout.FloatField(new GUIContent("B"), selectedColor.b > MAX_RGBA_VALUE - CLAMP_OFFSET ? MAX_RGBA_VALUE : (float)Math.Round(clampB, 2));
-        selectedColor.a = EditorGUILayout.FloatField(new GUIContent("A"), selectedColor.a > MAX_RGBA_VALUE - CLAMP_OFFSET ? MAX_RGBA_VALUE : (float)Math.Round(clampA, 2));
+        Color oldColor = selectedColor;
+        UpdateClampValues();
+        GetColor = oldColor; // => Property use to trigger delegate onValueChange for selectedColor
+    }
+
+    private void AddRandomRGBA(Color color)
+    {
+        color.r += UnityEngine.Random.Range(-0.2f, 0.2f);
+        color.g += UnityEngine.Random.Range(-0.2f, 0.2f);
+        color.b += UnityEngine.Random.Range(-0.2f, 0.2f);
+        color.a += UnityEngine.Random.Range(-0.2f, 0.2f);
+    }
+
+    private void UpdateClampValues()
+    {
+        float clampR = selectedColor.r < MIN_RGBA_VALUE ? MIN_RGBA_VALUE : selectedColor.r % MAX_RGBA_VALUE;
+        float clampG = selectedColor.g < MIN_RGBA_VALUE ? MIN_RGBA_VALUE : selectedColor.g % MAX_RGBA_VALUE;
+        float clampB = selectedColor.b < MIN_RGBA_VALUE ? MIN_RGBA_VALUE : selectedColor.b % MAX_RGBA_VALUE;
+        float clampA = selectedColor.a < MIN_RGBA_VALUE ? MIN_RGBA_VALUE : selectedColor.a % MAX_RGBA_VALUE;
+        selectedColor.r = EditorGUILayout.FloatField(new GUIContent("R"), selectedColor.r > MAX_RGBA_VALUE - CLAMP_OFFSET ? MAX_RGBA_VALUE : (float)Math.Round(clampR, NUMBER_DECIMAL));
+        selectedColor.g = EditorGUILayout.FloatField(new GUIContent("G"), selectedColor.g > MAX_RGBA_VALUE - CLAMP_OFFSET ? MAX_RGBA_VALUE : (float)Math.Round(clampG, NUMBER_DECIMAL));
+        selectedColor.b = EditorGUILayout.FloatField(new GUIContent("B"), selectedColor.b > MAX_RGBA_VALUE - CLAMP_OFFSET ? MAX_RGBA_VALUE : (float)Math.Round(clampB, NUMBER_DECIMAL));
+        selectedColor.a = EditorGUILayout.FloatField(new GUIContent("A"), selectedColor.a > MAX_RGBA_VALUE - CLAMP_OFFSET ? MAX_RGBA_VALUE : (float)Math.Round(clampA, NUMBER_DECIMAL));
     }
 
     void OnGUI() //Called every frame in Editor window
