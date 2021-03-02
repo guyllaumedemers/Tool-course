@@ -23,6 +23,8 @@ public class ColorWindow : EditorWindow
     Color selectedColor = Color.white;
     Color eraseColor = Color.white;
 
+    private Vector4 myRandoFactor;
+
     public delegate void MyDelegate(Color color);
     public MyDelegate myDelegate;
 
@@ -63,6 +65,10 @@ public class ColorWindow : EditorWindow
         Color oldColor = selectedColor;
         UpdateClampValues();
         GetColor = oldColor; // => Property use to trigger delegate onValueChange for selectedColor
+        EditorGUILayout.FloatField("Rnd_R", (float)Math.Round(myRandoFactor.x, NUMBER_DECIMAL));
+        EditorGUILayout.FloatField("Rnd_G", (float)Math.Round(myRandoFactor.y, NUMBER_DECIMAL));
+        EditorGUILayout.FloatField("Rnd_B", (float)Math.Round(myRandoFactor.z, NUMBER_DECIMAL));
+        EditorGUILayout.FloatField("Rnd_A", (float)Math.Round(myRandoFactor.w, NUMBER_DECIMAL));
     }
 
     private void AddRandomRGBA(Color color)
@@ -71,6 +77,7 @@ public class ColorWindow : EditorWindow
         color.g += UnityEngine.Random.Range(-0.2f, 0.2f);
         color.b += UnityEngine.Random.Range(-0.2f, 0.2f);
         color.a += UnityEngine.Random.Range(-0.2f, 0.2f);
+        myRandoFactor = color - selectedColor; // is that wonky?
     }
 
     private void UpdateClampValues()
