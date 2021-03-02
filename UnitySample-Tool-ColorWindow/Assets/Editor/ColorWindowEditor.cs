@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;  //Required for MenuItem, means that this is an Editor script, must be placed in an Editor folder, and cannot be compiled!
 using System.Linq;  //Used for Select
+using System;
 
 public class ColorWindow : EditorWindow
 { //Now is of type EditorWindow
@@ -35,7 +36,7 @@ public class ColorWindow : EditorWindow
 
     private Color GetRandomColor()  //Built a get random color tool
     {
-        return new Color(Random.value, Random.value, Random.value, 1f);
+        return new Color(UnityEngine.Random.value, UnityEngine.Random.value, UnityEngine.Random.value, 1f);
     }
 
     private void GetRGBAFields()
@@ -44,10 +45,10 @@ public class ColorWindow : EditorWindow
         float clampG = selectedColor.g < 0 ? 0 : selectedColor.g % MAX_RGBA_VALUE;
         float clampB = selectedColor.b < 0 ? 0 : selectedColor.b % MAX_RGBA_VALUE;
         float clampA = selectedColor.a < 0 ? 0 : selectedColor.a % MAX_RGBA_VALUE;
-        selectedColor.r = EditorGUILayout.FloatField(new GUIContent("R"), selectedColor.r > MAX_RGBA_VALUE - CLAMP_OFFSET ? MAX_RGBA_VALUE : clampR);
-        selectedColor.g = EditorGUILayout.FloatField(new GUIContent("G"), selectedColor.g > MAX_RGBA_VALUE - CLAMP_OFFSET ? MAX_RGBA_VALUE : clampG);
-        selectedColor.b = EditorGUILayout.FloatField(new GUIContent("B"), selectedColor.b > MAX_RGBA_VALUE - CLAMP_OFFSET ? MAX_RGBA_VALUE : clampB);
-        selectedColor.a = EditorGUILayout.FloatField(new GUIContent("A"), selectedColor.a > MAX_RGBA_VALUE - CLAMP_OFFSET ? MAX_RGBA_VALUE : clampA);
+        selectedColor.r = EditorGUILayout.FloatField(new GUIContent("R"), selectedColor.r > MAX_RGBA_VALUE - CLAMP_OFFSET ? MAX_RGBA_VALUE : (float)Math.Round(clampR, 2));
+        selectedColor.g = EditorGUILayout.FloatField(new GUIContent("G"), selectedColor.g > MAX_RGBA_VALUE - CLAMP_OFFSET ? MAX_RGBA_VALUE : (float)Math.Round(clampG, 2));
+        selectedColor.b = EditorGUILayout.FloatField(new GUIContent("B"), selectedColor.b > MAX_RGBA_VALUE - CLAMP_OFFSET ? MAX_RGBA_VALUE : (float)Math.Round(clampB, 2));
+        selectedColor.a = EditorGUILayout.FloatField(new GUIContent("A"), selectedColor.a > MAX_RGBA_VALUE - CLAMP_OFFSET ? MAX_RGBA_VALUE : (float)Math.Round(clampA, 2));
     }
 
     void OnGUI() //Called every frame in Editor window
