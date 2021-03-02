@@ -40,10 +40,9 @@ public class ColorWindow : EditorWindow
         myDelegate += AddRandomRGBA;
     }
 
-    private Color GetColor
+    public Color GetColor
     {
-        get => selectedColor;
-        set
+        set // only use to compare values
         {
             if (selectedColor == value)
                 return;
