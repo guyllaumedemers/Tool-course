@@ -30,8 +30,6 @@ public class ColorWindow : EditorWindow
 
     private readonly float MAX_RGBA_VALUE = 1.0f;
     private readonly float MIN_RGBA_VALUE = 0.0f;
-    private readonly float MIN_RANDOM_VALUE = -0.01f;
-    private readonly float MAX_RANDOM_VALUE = 0.01f;
     private readonly int NUMBER_DECIMAL = 2;
     private readonly float CLAMP_OFFSET = 0.01f;
 
@@ -41,15 +39,16 @@ public class ColorWindow : EditorWindow
         for (int i = 0; i < colors.Length; i++)
             colors[i] = GetRandomColor();
         colorTexture = EditorGUIUtility.whiteTexture;
-        myDelegate += OnColorSelectionRandom;
+        myDelegate += AddRandomRGBA;
     }
 
     public Color GetColor
     {
-        get
+        set // only use to compare values
         {
+            if (selectedColor == value)
+                return;
             myDelegate.Invoke(selectedColor);
-            return selectedColor;
         }
     }
 
@@ -58,38 +57,29 @@ public class ColorWindow : EditorWindow
         return new Color(UnityEngine.Random.value, UnityEngine.Random.value, UnityEngine.Random.value, 1f);
     }
 
-    private void GetEditorFieldsForColor()
+    /// <summary>
+    /// Could have use Mathf.Clamp but I like mine better
+    /// </summary>
+    private void GetRGBAFields()
     {
-        GetEditorLayoutForColorSelection();
-        GetEditorLayoutForRandomness();
-    }
-
-    private void GetEditorLayoutForColorSelection()
-    {
+        Color oldColor = selectedColor;
         UpdateClampValues();
-    }
-
-    private void GetEditorLayoutForRandomness()
-    {
-        GUILayout.Space(20.0f);
+        GetColor = oldColor; // => Property use to trigger delegate onValueChange for selectedColor
         EditorGUILayout.FloatField("Rnd_R", (float)Math.Round(myRandoFactor.x, NUMBER_DECIMAL));
         EditorGUILayout.FloatField("Rnd_G", (float)Math.Round(myRandoFactor.y, NUMBER_DECIMAL));
         EditorGUILayout.FloatField("Rnd_B", (float)Math.Round(myRandoFactor.z, NUMBER_DECIMAL));
         EditorGUILayout.FloatField("Rnd_A", (float)Math.Round(myRandoFactor.w, NUMBER_DECIMAL));
     }
 
-    private void OnColorSelectionRandom(Color color)
+    private void AddRandomRGBA(Color color)
     {
-        color.r += UnityEngine.Random.Range(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        color.g += UnityEngine.Random.Range(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        color.b += UnityEngine.Random.Range(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        color.r += UnityEngine.Random.Range(-0.2f, 0.2f);
+        color.g += UnityEngine.Random.Range(-0.2f, 0.2f);
+        color.b += UnityEngine.Random.Range(-0.2f, 0.2f);
+        color.a += UnityEngine.Random.Range(-0.2f, 0.2f);
         myRandoFactor = color - selectedColor; // is that wonky?
-        selectedColor = color;
     }
 
-    /// <summary>
-    /// Could have use Mathf.Clamp but I like mine better
-    /// </summary>
     private void UpdateClampValues()
     {
         float clampR = selectedColor.r < MIN_RGBA_VALUE ? MIN_RGBA_VALUE : selectedColor.r % MAX_RGBA_VALUE;
@@ -119,7 +109,7 @@ public class ColorWindow : EditorWindow
         if (GUILayout.Button("Fill All"))                                               //A button, if pressed, returns true
             colors = colors.Select(c => c = selectedColor).ToArray();                   //Linq expresion, for every color in the color array, sets it to the selected color
 
-        GetEditorFieldsForColor();
+        GetRGBAFields();
 
         GUILayout.FlexibleSpace();                                                      //Flexible space uses any left over space in the loadout
         textureTarget = EditorGUILayout.ObjectField("Output Renderer", textureTarget, typeof(Renderer), true) as Renderer;  //Build an object field that accepts a renderer
@@ -160,7 +150,7 @@ public class ColorWindow : EditorWindow
                 if ((evt.type == EventType.MouseDown || evt.type == EventType.MouseDrag) && colorRect.Contains(evt.mousePosition)) //Can now paint while dragging update
                 {
                     if (evt.button == 0)                //If mouse button pressed is left
-                        colors[index] = GetColor;       //Set the color of the index
+                        colors[index] = selectedColor; //Set the color of the index
                     else
                         colors[index] = eraseColor;   //Set the color of the index
                     evt.Use();                        //The event was consumed, if you try to use event after this, it will be non-sensical
