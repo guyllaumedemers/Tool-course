@@ -14,20 +14,22 @@ public class ColorWindow : EditorWindow
         EditorWindow window = GetWindow<ColorWindow>("Color Window");
     }
 
-    private Color[] colors;
+    private Color[,] colors;
     private int width = 8;
     private int height = 8;
     Texture colorTexture;
     Renderer textureTarget;
 
-    Color selectedColor = Color.white;
-    Color eraseColor = Color.white;
-
+    [Header("Color Picker")]
+    private Color selectedColor = Color.white;
+    private Color eraseColor = Color.white;
     private Vector4 myRandoFactor;
 
     public delegate void MyDelegate(Color color);
+    [Header("Delegates")]
     public MyDelegate myDelegate;
 
+    [Header("Editor Fields Constants")]
     private readonly float MAX_RGBA_VALUE = 1.0f;
     private readonly float MIN_RGBA_VALUE = 0.0f;
     private readonly float MIN_RANDOM_VALUE = -0.01f;
@@ -35,11 +37,16 @@ public class ColorWindow : EditorWindow
     private readonly int NUMBER_DECIMAL = 2;
     private readonly float CLAMP_OFFSET = 0.01f;
 
+    [Header("NEIGHBOR VARIABLES")]
+    private readonly int UNIT_NEIGHBOR = 1;
+    private readonly int ZERO_POSITION = 0;
+
     public void OnEnable()
     {
-        colors = new Color[width * height];
-        for (int i = 0; i < colors.Length; i++)
-            colors[i] = GetRandomColor();
+        colors = new Color[width, height];
+        for (int i = 0; i < colors.GetLength(0); i++)
+            for (int j = 0; j < colors.GetLength(1); j++)
+                colors[i, j] = GetRandomColor();
         colorTexture = EditorGUIUtility.whiteTexture;
         myDelegate += OnSelectionChanged;
     }
@@ -83,6 +90,7 @@ public class ColorWindow : EditorWindow
 
     private void OnSelectionChanged(Color color)
     {
+        //myRandoFactor = color; // => use only if we want to display the value before the random factor is applied
         color.r += UnityEngine.Random.Range(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
         color.g += UnityEngine.Random.Range(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
         color.b += UnityEngine.Random.Range(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
@@ -117,7 +125,7 @@ public class ColorWindow : EditorWindow
         selectedColor = EditorGUILayout.ColorField("Paint Color", selectedColor);       //Make a color field with the text "Paint Color" and have it fill the selectedColor var
         eraseColor = EditorGUILayout.ColorField("Erase Color", eraseColor);             //Make a color field with the text "Erase Color"
         if (GUILayout.Button("Fill All"))                                               //A button, if pressed, returns true
-            colors = colors.Select(c => c = selectedColor).ToArray();                   //Linq expresion, for every color in the color array, sets it to the selected color
+            FillMatrix();                                                                  //colors = colors.Select(c => c = selectedColor).ToArray();                   //Linq expresion, for every color in the color array, sets it to the selected color
 
         GetEditorFieldsForSelectedColor();
 
@@ -135,8 +143,7 @@ public class ColorWindow : EditorWindow
             {
                 for (int j = 0; j < height; j++)
                 {
-                    int index = j + i * height;
-                    t2d.SetPixel(i, height - 1 - j, colors[index]);                     //Color every pixel using our color table, the texture is 8x8 pixels large, but strecthes to fit
+                    t2d.SetPixel(i, height - 1 - j, colors[i, j]);                     //Color every pixel using our color table, the texture is 8x8 pixels large, but strecthes to fit
                 }
             }
             t2d.Apply();                                                                //Apply all changes to texture
@@ -155,23 +162,128 @@ public class ColorWindow : EditorWindow
             GUILayout.BeginVertical();                //All following gui will be in a vertical line
             for (int j = 0; j < height; j++)
             {
-                int index = j + i * height;           //Rememeber, this is just like a 2D array, but in 1D
                 Rect colorRect = GUILayoutUtility.GetRect(GUIContent.none, GUIStyle.none, GUILayout.ExpandWidth(true), GUILayout.ExpandHeight(true)); //Reserve a square, which will autofit to the size given
-                if ((evt.type == EventType.MouseDown || evt.type == EventType.MouseDrag) && colorRect.Contains(evt.mousePosition)) //Can now paint while dragging update
-                {
-                    if (evt.button == 0)                //If mouse button pressed is left
-                        colors[index] = GetColor;       //Set the color of the index
-                    else
-                        colors[index] = eraseColor;   //Set the color of the index
-                    evt.Use();                        //The event was consumed, if you try to use event after this, it will be non-sensical
-                }
+                HandleEvents(evt, colorRect, i, j);
 
-                GUI.color = colors[index];            //Same as a 2D array
+                GUI.color = colors[i, j];            //Same as a 2D array
                 GUI.DrawTexture(colorRect, colorTexture); //This is colored by GUI.Color!!!
             }
             GUILayout.EndVertical();                  //End Vertical Zone
         }
         GUILayout.EndHorizontal();                    //End horizontal zone
         GUI.color = oldColor;                         //Restore the old color
+    }
+
+    private void HandleEvents(Event evt, Rect colorRect, int i, int j)
+    {
+        if ((evt.type == EventType.MouseDown || evt.type == EventType.MouseDrag) && colorRect.Contains(evt.mousePosition)) //Can now paint while dragging update
+        {
+            if (evt.button == 0)                //If mouse button pressed is left
+                PaintFill(evt, colorRect, i, j);
+            //colors[i, j] = GetColor;          //Set the color of the index
+            else
+                colors[i, j] = eraseColor;      //Set the color of the index
+            evt.Use();                          //The event was consumed, if you try to use event after this, it will be non-sensical
+        }
+    }
+
+
+    private void FillMatrix()
+    {
+        for (int i = 0; i < colors.GetLength(0); i++)
+        {
+            for (int j = 0; j < colors.GetLength(1); j++)
+            {
+                colors[i, j] = selectedColor;
+            }
+        }
+    }
+
+    private void Selection(Queue<Vector2> list)
+    {
+        foreach (Vector2 v in list)
+        {
+            colors[(int)v.x, (int)v.y] = selectedColor;
+        }
+    }
+    private void PaintFill(Event evt, Rect colorRect, int i, int j)
+    {
+        if (colors[i, j] != eraseColor)
+        {
+            Queue<Vector2> toFill = BFSAlgorithm(i, j);
+
+            if (toFill != null)
+                Selection(toFill);
+        }
+    }
+
+    private Queue<Vector2> BFSAlgorithm(int positionXclicked, int positionYclicked)
+    {
+        Queue<Vector2> myNeighbors = new Queue<Vector2>();
+        Queue<Vector2> flagged = new Queue<Vector2>();
+
+        myNeighbors.Enqueue(new Vector2 { x = positionXclicked, y = positionYclicked });
+
+        while (myNeighbors.Count > 0)
+        {
+            if (!Exist(flagged, myNeighbors.ToArray()[0]))
+                flagged.Enqueue(myNeighbors.ToArray()[0]);
+
+            if (myNeighbors != null && flagged != null)
+                GetNeighbors(myNeighbors, flagged);
+
+            if (myNeighbors != null)
+                myNeighbors.Dequeue();
+        }
+        return flagged;
+    }
+
+    private void GetNeighbors(Queue<Vector2> myNeighbors, Queue<Vector2> flagged)
+    {
+        Vector2 mycurrentposition = myNeighbors.ToArray()[0];
+
+        int minRow = GetMin((int)mycurrentposition.x);
+        int maxRow = GetMax((int)mycurrentposition.x, height);
+
+        int minCol = GetMin((int)mycurrentposition.y);
+        int maxCol = GetMax((int)mycurrentposition.y, width);
+
+        AddValidNeighbors(myNeighbors, flagged, minRow, maxRow, minCol, maxCol, mycurrentposition);
+    }
+
+    private void AddValidNeighbors(Queue<Vector2> myNeighbors, Queue<Vector2> flagged, int minRow, int maxRow, int minCol, int maxCol, Vector2 mycurrentposition)
+    {
+        for (int i = minRow; i <= maxRow; i++)
+        {
+            for (int j = minCol; j <= maxCol; j++)
+            {
+                Vector2 myVec2 = new Vector2 { x = i, y = j };
+
+                if (Exist(myNeighbors, myVec2))
+                    continue;
+                else if (colors[i, j] != eraseColor && !Exist(flagged, myVec2))
+                    myNeighbors.Enqueue(myVec2);
+            }
+        }
+    }
+
+    private int GetMin(int position)
+    {
+        return position - UNIT_NEIGHBOR < ZERO_POSITION ? position : position - UNIT_NEIGHBOR;
+    }
+
+    private int GetMax(int position, int size)
+    {
+        return position + UNIT_NEIGHBOR > size ? position : position + UNIT_NEIGHBOR;
+    }
+
+    private bool Exist(Queue<Vector2> myList, Vector2 vector2)
+    {
+        foreach (Vector2 v in myList)
+        {
+            if (v.Equals(vector2))
+                return true;
+        }
+        return false;
     }
 }
