@@ -248,7 +248,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bea1e0ef12ce5c340a57fca2a531ca02, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  nb_shapes: 2
+  nb_shapes: 3
   prefab: {fileID: 788502822291779077, guid: df2ee008451367c46afe43ec399565e8, type: 3}
   meshType: 0
   materials: []
@@ -260,7 +260,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 451657281}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 4.9, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}

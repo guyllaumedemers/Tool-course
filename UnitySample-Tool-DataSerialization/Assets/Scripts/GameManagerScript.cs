@@ -4,17 +4,24 @@ using UnityEngine;
 
 public class GameManagerScript : MonoBehaviour
 {
-    private static GameManagerScript instance;
-    private GameManagerScript() { }
+    private static GameManagerScript _instance;
+
     public static GameManagerScript Instance
     {
         get
         {
-            if (instance == null)
+            if (_instance == null)
             {
-                instance = new GameManagerScript();
+                _instance = GameObject.FindObjectOfType<GameManagerScript>();
+                if (_instance == null)
+                {
+                    GameObject go = new GameObject("Game Manager");
+                    _instance = go.AddComponent<GameManagerScript>();
+                    DontDestroyOnLoad(go);
+                }
             }
-            return instance;
+
+            return _instance;
         }
     }
 
@@ -36,18 +43,43 @@ public class GameManagerScript : MonoBehaviour
 
     private void Awake()
     {
-        instance = this;
         list = new List<GameObject>();
         keyValuePairs = new Dictionary<EnumMeshType, List<ShapeObjectDataInfo>>();
-        //materials = new Material[10];
-        //materials[0] = Resources.Load<Material>("Assets/Resources/Materials/redMat.mat");
-        ////materials = Resources.LoadAll<Material>(MATERIAL_PATH);
-        //Debug.Log(materials[0]);
     }
 
     private void Update()
     {
-        /// update the Dictionnary onChange
+        // update the Dictionnary entries values
+    }
+
+    private void OnDeserilizationLoad()
+    {
+        if (keyValuePairs != null)
+            InstanciateLoadedAsset();
+    }
+
+    private void InstanciateLoadedAsset()
+    {
+        foreach (KeyValuePair<EnumMeshType, List<ShapeObjectDataInfo>> kvp in keyValuePairs)
+        {
+            EnumMeshType meshType = kvp.Key;
+            foreach (ShapeObjectDataInfo entries in kvp.Value)
+            {
+                GameObject go = GameObject.CreatePrimitive((PrimitiveType)meshType);
+                ShapeObjectDataInfo dataInfo = go.GetComponent<ShapeObjectDataInfo>();
+                LoadDataToGameObject(go, dataInfo);
+            }
+        }
+    }
+
+    private void LoadDataToGameObject(GameObject go, ShapeObjectDataInfo dataInfo)
+    {
+        Vector3 vector3 = new Vector3();
+        vector3.x = dataInfo.GetPosition.X;
+        vector3.y = dataInfo.GetPosition.Y;
+        vector3.z = dataInfo.GetPosition.Z;
+        go.transform.position = vector3;
+
     }
 
     public void InstanciateShapes(GameObject myPrefab, int number)
@@ -57,11 +89,15 @@ public class GameManagerScript : MonoBehaviour
             if (myPrefab != null)
             {
                 GameObject go = Instantiate(myPrefab, GetNewPosition(), Quaternion.identity);
+#if !UNITY_EDITOR
                 go.name = $"{GameManagerScript.Instance.GetMeshType.ToString().ToLower()} " + $"{list.Count}";
+#endif
                 list?.Add(go);
             }
         }
-        AddToKVP(GameManagerScript.Instance.GetMeshType, list); // test purposes only
+#if !UNITY_EDITOR
+        AddToKVP(GameManagerScript.Instance.GetMeshType, list);
+#endif
     }
 
     private void AddToKVP(EnumMeshType meshType, List<GameObject> list)
@@ -72,8 +108,19 @@ public class GameManagerScript : MonoBehaviour
             ShapeObject dat = go.GetComponent<ShapeObject>();
             dataInfoList.Add(dat.GetDataInfo);
         }
-        keyValuePairs.Add(meshType, dataInfoList);
+        if (!keyValuePairs.ContainsKey(meshType))
+            keyValuePairs.Add(meshType, dataInfoList);
+        else
+            ExpandDictionnaryList(meshType, dataInfoList);
         dataInfoList.Clear();
+    }
+
+    private void ExpandDictionnaryList(EnumMeshType meshType, List<ShapeObjectDataInfo> shapeObjectDataInfos)
+    {
+        foreach (ShapeObjectDataInfo entry in shapeObjectDataInfos)
+        {
+            keyValuePairs[meshType].Add(entry);
+        }
     }
 
     private Vector3 GetNewPosition()
@@ -87,5 +134,5 @@ public class GameManagerScript : MonoBehaviour
 
     public EnumMeshType GetMeshType { get => meshType; set { meshType = value; } }
 
-    public Dictionary<EnumMeshType, List<ShapeObjectDataInfo>> GetDictionnary { get => keyValuePairs; }
+    public Dictionary<EnumMeshType, List<ShapeObjectDataInfo>> GetDictionnary { get => keyValuePairs; set { keyValuePairs = value; } }
 }

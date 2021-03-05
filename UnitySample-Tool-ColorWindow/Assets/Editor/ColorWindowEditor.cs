@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;  //Required for MenuItem, means that this is an Editor script, must be placed in an Editor folder, and cannot be compiled!
@@ -253,11 +253,20 @@ public class ColorWindow : EditorWindow
 
     private void AddValidNeighbors(Queue<Vector2> myNeighbors, Queue<Vector2> flagged, int minRow, int maxRow, int minCol, int maxCol, Vector2 mycurrentposition)
     {
-        for (int i = minRow; i <= maxRow; i++)
+        for (int i = minRow; i < maxRow; i++)
         {
-            for (int j = minCol; j <= maxCol; j++)
+            for (int j = minCol; j < maxCol; j++)
             {
                 Vector2 myVec2 = new Vector2 { x = i, y = j };
+                try
+                {
+                    Color c = colors[i, j];
+
+                }
+                catch
+                {
+                    Debug.Log("Here");
+                }
 
                 if (Exist(myNeighbors, myVec2))
                     continue;

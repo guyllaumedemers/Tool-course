@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
+using System.Runtime.Serialization;
 
 public static class Serialization
 {
@@ -11,17 +12,40 @@ public static class Serialization
 
     public static void SaveBinaryFile()
     {
-        BinaryFormatter bf = new BinaryFormatter();
-        //FileStream fs = File.Open(Application.dataPath + "dataInfo.dat", FileMode.Append);
         FileStream fs = File.Open(PATH, FileMode.Append);
-        ShapeObjectDataInfo shapeObjectDataInfo = new ShapeObjectDataInfo();
-        bf.Serialize(fs, shapeObjectDataInfo);
-        fs.Close();
+        try
+        {
+            BinaryFormatter bf = new BinaryFormatter();
+            //FileStream fs = File.Open(Application.dataPath + "dataInfo.dat", FileMode.Append);
+            bf.Serialize(fs, GameManagerScript.Instance.GetDictionnary);
+        }
+        catch (SerializationException e)
+        {
+            Debug.Log("Failed to Serialize : " + e.Message);
+            throw;
+        }
+        finally
+        {
+            fs.Close();
+        }
     }
 
     public static void LoadBinaryFile()
     {
-
+        FileStream fs = File.OpenRead(PATH);
+        try
+        {
+            BinaryFormatter bf = new BinaryFormatter();
+            GameManagerScript.Instance.GetDictionnary = (Dictionary<EnumMeshType, List<ShapeObjectDataInfo>>)bf.Deserialize(fs);
+        }
+        catch (DirectoryNotFoundException e)
+        {
+            Debug.Log("Directory not found : " + e.Message);
+        }
+        finally
+        {
+            fs.Close();
+        }
     }
 
     public static void SaveJSONFile()
