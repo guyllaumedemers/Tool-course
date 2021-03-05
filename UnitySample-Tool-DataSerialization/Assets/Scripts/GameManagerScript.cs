@@ -53,57 +53,18 @@ public class GameManagerScript : MonoBehaviour
         // update the Dictionnary entries values
     }
 
-    public void OnDeserilizationLoad()
+    public void OnSerialization()
+    {
+        if (keyValuePairs != null)
+            UpdateDictionnary();
+        Serialization.SaveBinaryFile();
+    }
+
+    public void OnDeserilization()
     {
         Serialization.LoadBinaryFile();
         if (keyValuePairs != null)
             InstanciateLoadedAsset();
-    }
-
-    private void InstanciateLoadedAsset()
-    {
-        foreach (KeyValuePair<EnumMeshType, List<ShapeObjectDataInfo>> kvp in keyValuePairs)
-        {
-            EnumMeshType meshType = kvp.Key;
-            foreach (ShapeObjectDataInfo entries in kvp.Value)
-            {
-                GameObject go = GameObject.CreatePrimitive((PrimitiveType)meshType);
-                LoadDataToGameObject(go, entries);
-                list?.Add(go);
-                Destroy(go);
-            }
-        }
-    }
-
-    private void LoadDataToGameObject(GameObject go, ShapeObjectDataInfo dataInfo)
-    {
-        Vector3 vector3 = new Vector3();
-        vector3.x = dataInfo.GetPosition.X;
-        vector3.y = dataInfo.GetPosition.Y;
-        vector3.z = dataInfo.GetPosition.Z;
-        go.transform.position = vector3;
-
-    }
-
-    private ShapeObject UpdateShapeObjectDataInfo(GameObject go, ShapeObject dat)
-    {
-        ShapeObjectDataInfo dataInfo = dat.GetDataInfo;
-
-        MeshRenderer meshRenderer = go.GetComponent<MeshRenderer>();
-
-        Color myColor = meshRenderer.material.color;
-        dataInfo.GetColor = new MyColor(myColor.r, myColor.g, myColor.b, myColor.a);
-
-        Vector3 vector3 = new Vector3();
-
-        vector3.x = dataInfo.GetPosition.X;
-        vector3.y = dataInfo.GetPosition.Y;
-        vector3.z = dataInfo.GetPosition.Z;
-        dataInfo.GetPosition = new MyVector3(vector3.x, vector3.y, vector3.z);
-
-
-        dat.GetDataInfo = dataInfo;
-        return dat;
     }
 
     public void InstanciateShapes(GameObject myPrefab, int number)
@@ -124,13 +85,49 @@ public class GameManagerScript : MonoBehaviour
         //#endif
     }
 
+    private void InstanciateLoadedAsset()
+    {
+        foreach (KeyValuePair<EnumMeshType, List<ShapeObjectDataInfo>> kvp in keyValuePairs)
+        {
+            EnumMeshType meshType = kvp.Key;
+            foreach (ShapeObjectDataInfo entries in kvp.Value)
+            {
+                GameObject go = LoadGameObjectFromDictionnary(entries, meshType);
+                list?.Add(go);
+                Destroy(go);
+            }
+        }
+    }
+
+    /*************************UPDATING GAMEOBJECT****************************/
+    private GameObject LoadGameObjectFromDictionnary(ShapeObjectDataInfo entries, EnumMeshType meshType)
+    {
+        GameObject go = GameObject.CreatePrimitive((PrimitiveType)meshType);
+        go.AddComponent<ShapeObject>();
+        go.GetComponent<ShapeObject>().GetDataInfo = entries;
+        return go;
+    }
+
+    private ShapeObjectDataInfo UpdateGameObjectData(GameObject go, ShapeObjectDataInfo dataInfo)
+    {
+        MeshRenderer meshRenderer = go.GetComponent<MeshRenderer>();
+
+        Color myColor = meshRenderer.material.color;
+        dataInfo.GetColor = new MyColor(myColor.r, myColor.g, myColor.b, myColor.a);
+
+        Vector3 vector3 = go.transform.position;
+        dataInfo.GetPosition = new MyVector3(vector3.x, vector3.y, vector3.z);
+        return dataInfo;
+    }
+
+    /*****************************DICTIONNARY********************************/
     private void AddToKVP(EnumMeshType meshType, List<GameObject> list)
     {
         List<ShapeObjectDataInfo> dataInfoList = new List<ShapeObjectDataInfo>();
         foreach (GameObject go in list)
         {
             ShapeObject dat = go.GetComponent<ShapeObject>();
-            dat = UpdateShapeObjectDataInfo(go, dat);
+            dat.GetDataInfo = UpdateGameObjectData(go, dat.GetDataInfo);
             dataInfoList.Add(dat.GetDataInfo);
         }
         if (!keyValuePairs.ContainsKey(meshType))
@@ -148,6 +145,19 @@ public class GameManagerScript : MonoBehaviour
         }
     }
 
+    private void UpdateDictionnary()
+    {
+        foreach (KeyValuePair<EnumMeshType, List<ShapeObjectDataInfo>> kvp in keyValuePairs)
+        {
+            EnumMeshType meshType = kvp.Key;
+            foreach (ShapeObjectDataInfo entries in kvp.Value)
+            {
+
+            }
+        }
+    }
+
+    /*****************************UTILITIES************************************/
     private Vector3 GetNewPosition()
     {
         Vector3 myVec3 = new Vector3();
@@ -157,9 +167,11 @@ public class GameManagerScript : MonoBehaviour
         return myVec3;
     }
 
+    /*****************************PROPERTIES************************************/
     public EnumMeshType GetMeshType { get => meshType; set { meshType = value; } }
 
     public Material[] GetMaterials { get => materials; }
 
     public Dictionary<EnumMeshType, List<ShapeObjectDataInfo>> GetDictionnary { get => keyValuePairs; set { keyValuePairs = value; } }
+    /**************************************************************************/
 }

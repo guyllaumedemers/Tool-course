@@ -59,9 +59,9 @@ public class GameManagerScriptEditor : Editor
         GUILayout.FlexibleSpace();
         GUILayout.BeginHorizontal();
         if (GUILayout.Button(new GUIContent("Save"), GUILayout.ExpandWidth(true)))
-            Serialization.SaveBinaryFile();
+            GameManagerScript.Instance.OnSerialization();
         if (GUILayout.Button(new GUIContent("Load"), GUILayout.ExpandWidth(true)))
-            GameManagerScript.Instance.OnDeserilizationLoad();
+            GameManagerScript.Instance.OnDeserilization();
         GUILayout.EndHorizontal();
         GUILayout.EndVertical();
 

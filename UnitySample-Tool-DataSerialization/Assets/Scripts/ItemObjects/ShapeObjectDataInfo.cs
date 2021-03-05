@@ -6,32 +6,34 @@ using UnityEngine;
 [System.Serializable]
 public struct MyVector3
 {
-    public MyVector3(float x, float y, float z)
+    private float x, y, z;
+    public MyVector3(float myX, float myY, float myZ)
     {
-        X = x;
-        Y = y;
-        Z = z;
+        x = myX;
+        y = myY;
+        z = myZ;
     }
 
-    public float X { get; }
-    public float Y { get; }
-    public float Z { get; }
+    public float GetX { get => x; set { x = value; } }
+    public float GetY { get => y; set { y = value; } }
+    public float GetZ { get => z; set { z = value; } }
 }
 [System.Serializable]
 public struct MyColor
 {
-    public MyColor(float x, float y, float z, float w)
+    private float x, y, z, w;
+    public MyColor(float myX, float myY, float myZ, float myW)
     {
-        X = x;
-        Y = y;
-        Z = z;
-        W = w;
+        x = myX;
+        y = myY;
+        z = myZ;
+        w = myW;
     }
 
-    public float X { get; }
-    public float Y { get; }
-    public float Z { get; }
-    public float W { get; }
+    public float GetX { get => x; set { x = value; } }
+    public float GetY { get => y; set { y = value; } }
+    public float GetZ { get => z; set { z = value; } }
+    public float GetW { get => w; set { w = value; } }
 }
 
 [System.Serializable]
