@@ -21,10 +21,11 @@ public class ShapeObject : MonoBehaviour
 
     private void Start()
     {
+        dataInfo = new ShapeObjectDataInfo();
         SetMesh();
     }
 
-    private void UpdateDataInfo(Vector3 position, Color color)
+    public void UpdateDataInfo(MyVector3 position, MyColor color)
     {
         dataInfo.GetPosition = position;
         dataInfo.GetColor = color;
@@ -36,7 +37,6 @@ public class ShapeObject : MonoBehaviour
         mesh = GetComponent<MeshFilter>();
         meshRenderer = GetComponent<MeshRenderer>();
         meshCollider = GetComponent<MeshCollider>();
-        dataInfo = new ShapeObjectDataInfo();
     }
 
     private void SetMesh()
@@ -46,4 +46,6 @@ public class ShapeObject : MonoBehaviour
         meshCollider.sharedMesh = mesh.mesh;
         Destroy(go);
     }
+
+    public ShapeObjectDataInfo GetDataInfo { get => dataInfo; }
 }

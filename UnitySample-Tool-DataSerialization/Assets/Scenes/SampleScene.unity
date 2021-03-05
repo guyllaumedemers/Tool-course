@@ -251,6 +251,7 @@ MonoBehaviour:
   nb_shapes: 2
   prefab: {fileID: 788502822291779077, guid: df2ee008451367c46afe43ec399565e8, type: 3}
   meshType: 0
+  materials: []
 --- !u!4 &451657283
 Transform:
   m_ObjectHideFlags: 0

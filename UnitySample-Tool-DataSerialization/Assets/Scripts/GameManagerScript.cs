@@ -28,8 +28,8 @@ public class GameManagerScript : MonoBehaviour
     private readonly int SPAWN_HEIGHT = 5;
 
     [Header("Database")]
-    private List<GameObject> gameObjects;
-    private Dictionary<EnumMeshType, List<GameObject>> keyValuePairs;
+    private List<GameObject> list;
+    private Dictionary<EnumMeshType, List<ShapeObjectDataInfo>> keyValuePairs;
 
     [Header("String path")]
     private readonly string MATERIAL_PATH = "Assets/Resources/Materials";
@@ -37,8 +37,8 @@ public class GameManagerScript : MonoBehaviour
     private void Awake()
     {
         instance = this;
-        gameObjects = new List<GameObject>();
-        keyValuePairs = new Dictionary<EnumMeshType, List<GameObject>>();
+        list = new List<GameObject>();
+        keyValuePairs = new Dictionary<EnumMeshType, List<ShapeObjectDataInfo>>();
         //materials = new Material[10];
         //materials[0] = Resources.Load<Material>("Assets/Resources/Materials/redMat.mat");
         ////materials = Resources.LoadAll<Material>(MATERIAL_PATH);
@@ -57,10 +57,23 @@ public class GameManagerScript : MonoBehaviour
             if (myPrefab != null)
             {
                 GameObject go = Instantiate(myPrefab, GetNewPosition(), Quaternion.identity);
-                go.name = $"{GameManagerScript.Instance.GetMeshType.ToString().ToLower()} " + $"{gameObjects.Count}";
-                gameObjects?.Add(go);
+                go.name = $"{GameManagerScript.Instance.GetMeshType.ToString().ToLower()} " + $"{list.Count}";
+                list?.Add(go);
             }
         }
+        AddToKVP(GameManagerScript.Instance.GetMeshType, list); // test purposes only
+    }
+
+    private void AddToKVP(EnumMeshType meshType, List<GameObject> list)
+    {
+        List<ShapeObjectDataInfo> dataInfoList = new List<ShapeObjectDataInfo>();
+        foreach (GameObject go in list)
+        {
+            ShapeObject dat = go.GetComponent<ShapeObject>();
+            dataInfoList.Add(dat.GetDataInfo);
+        }
+        keyValuePairs.Add(meshType, dataInfoList);
+        dataInfoList.Clear();
     }
 
     private Vector3 GetNewPosition()
@@ -73,4 +86,6 @@ public class GameManagerScript : MonoBehaviour
     }
 
     public EnumMeshType GetMeshType { get => meshType; set { meshType = value; } }
+
+    public Dictionary<EnumMeshType, List<ShapeObjectDataInfo>> GetDictionnary { get => keyValuePairs; }
 }
