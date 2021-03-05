@@ -14,13 +14,12 @@ public class ShapeObject : MonoBehaviour
     [Header("Serialize Data")]
     private ShapeObjectDataInfo dataInfo;
 
+    private int index = 0;
+
     private void Awake()
     {
         InitializeComponentsObject();
-    }
-
-    private void Start()
-    {
+        index = UnityEngine.Random.Range(0, GameManagerScript.Instance.GetMaterials.Length - 1);
         dataInfo = new ShapeObjectDataInfo();
         SetMesh();
     }
@@ -43,9 +42,10 @@ public class ShapeObject : MonoBehaviour
     {
         GameObject go = GameObject.CreatePrimitive((PrimitiveType)GameManagerScript.Instance.GetMeshType);
         mesh.mesh = go.GetComponent<MeshFilter>().mesh;
+        meshRenderer.material = GameManagerScript.Instance.GetMaterials[index];
         meshCollider.sharedMesh = mesh.mesh;
         Destroy(go);
     }
 
-    public ShapeObjectDataInfo GetDataInfo { get => dataInfo; }
+    public ShapeObjectDataInfo GetDataInfo { get => dataInfo; set { dataInfo = value; } }
 }

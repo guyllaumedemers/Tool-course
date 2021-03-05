@@ -16,7 +16,6 @@ public static class Serialization
         try
         {
             BinaryFormatter bf = new BinaryFormatter();
-            //FileStream fs = File.Open(Application.dataPath + "dataInfo.dat", FileMode.Append);
             bf.Serialize(fs, GameManagerScript.Instance.GetDictionnary);
         }
         catch (SerializationException e)

@@ -2,10 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[ExecuteInEditMode]
 public class GameManagerScript : MonoBehaviour
 {
     private static GameManagerScript _instance;
-
     public static GameManagerScript Instance
     {
         get
@@ -39,12 +39,13 @@ public class GameManagerScript : MonoBehaviour
     private Dictionary<EnumMeshType, List<ShapeObjectDataInfo>> keyValuePairs;
 
     [Header("String path")]
-    private readonly string MATERIAL_PATH = "Assets/Resources/Materials";
+    private readonly string MATERIAL_PATH = "Materials/";
 
     private void Awake()
     {
         list = new List<GameObject>();
         keyValuePairs = new Dictionary<EnumMeshType, List<ShapeObjectDataInfo>>();
+        materials = Resources.LoadAll<Material>(MATERIAL_PATH);
     }
 
     private void Update()
@@ -52,8 +53,9 @@ public class GameManagerScript : MonoBehaviour
         // update the Dictionnary entries values
     }
 
-    private void OnDeserilizationLoad()
+    public void OnDeserilizationLoad()
     {
+        Serialization.LoadBinaryFile();
         if (keyValuePairs != null)
             InstanciateLoadedAsset();
     }
@@ -66,8 +68,9 @@ public class GameManagerScript : MonoBehaviour
             foreach (ShapeObjectDataInfo entries in kvp.Value)
             {
                 GameObject go = GameObject.CreatePrimitive((PrimitiveType)meshType);
-                ShapeObjectDataInfo dataInfo = go.GetComponent<ShapeObjectDataInfo>();
-                LoadDataToGameObject(go, dataInfo);
+                LoadDataToGameObject(go, entries);
+                list?.Add(go);
+                Destroy(go);
             }
         }
     }
@@ -82,6 +85,27 @@ public class GameManagerScript : MonoBehaviour
 
     }
 
+    private ShapeObject UpdateShapeObjectDataInfo(GameObject go, ShapeObject dat)
+    {
+        ShapeObjectDataInfo dataInfo = dat.GetDataInfo;
+
+        MeshRenderer meshRenderer = go.GetComponent<MeshRenderer>();
+
+        Color myColor = meshRenderer.material.color;
+        dataInfo.GetColor = new MyColor(myColor.r, myColor.g, myColor.b, myColor.a);
+
+        Vector3 vector3 = new Vector3();
+
+        vector3.x = dataInfo.GetPosition.X;
+        vector3.y = dataInfo.GetPosition.Y;
+        vector3.z = dataInfo.GetPosition.Z;
+        dataInfo.GetPosition = new MyVector3(vector3.x, vector3.y, vector3.z);
+
+
+        dat.GetDataInfo = dataInfo;
+        return dat;
+    }
+
     public void InstanciateShapes(GameObject myPrefab, int number)
     {
         for (int i = 0; i < number; i++)
@@ -89,15 +113,15 @@ public class GameManagerScript : MonoBehaviour
             if (myPrefab != null)
             {
                 GameObject go = Instantiate(myPrefab, GetNewPosition(), Quaternion.identity);
-#if !UNITY_EDITOR
+                //#if !UNITY_EDITOR
                 go.name = $"{GameManagerScript.Instance.GetMeshType.ToString().ToLower()} " + $"{list.Count}";
-#endif
                 list?.Add(go);
+                //#endif
             }
         }
-#if !UNITY_EDITOR
+        //#if !UNITY_EDITOR
         AddToKVP(GameManagerScript.Instance.GetMeshType, list);
-#endif
+        //#endif
     }
 
     private void AddToKVP(EnumMeshType meshType, List<GameObject> list)
@@ -106,6 +130,7 @@ public class GameManagerScript : MonoBehaviour
         foreach (GameObject go in list)
         {
             ShapeObject dat = go.GetComponent<ShapeObject>();
+            dat = UpdateShapeObjectDataInfo(go, dat);
             dataInfoList.Add(dat.GetDataInfo);
         }
         if (!keyValuePairs.ContainsKey(meshType))
@@ -133,6 +158,8 @@ public class GameManagerScript : MonoBehaviour
     }
 
     public EnumMeshType GetMeshType { get => meshType; set { meshType = value; } }
+
+    public Material[] GetMaterials { get => materials; }
 
     public Dictionary<EnumMeshType, List<ShapeObjectDataInfo>> GetDictionnary { get => keyValuePairs; set { keyValuePairs = value; } }
 }
