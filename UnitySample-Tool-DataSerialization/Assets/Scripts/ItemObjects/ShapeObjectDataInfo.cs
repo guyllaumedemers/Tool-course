@@ -13,7 +13,6 @@ public struct MyVector3
         y = myY;
         z = myZ;
     }
-
     public float GetX { get => x; set { x = value; } }
     public float GetY { get => y; set { y = value; } }
     public float GetZ { get => z; set { z = value; } }
@@ -42,14 +41,18 @@ public class ShapeObjectDataInfo
     [Header("Object Information")]
     [SerializeField] private MyVector3 position;
     [SerializeField] private MyColor color;
+    [SerializeField] private EnumMeshType meshType;
 
     public ShapeObjectDataInfo()
     {
         position = new MyVector3(0, 0, 0);
         color = new MyColor(1, 1, 1, 1);
+        meshType = 0;
     }
 
     public MyVector3 GetPosition { get => position; set { position = value; } }
 
     public MyColor GetColor { get => color; set { color = value; } }
+
+    public EnumMeshType GetEnumType { get => meshType; set { meshType = value; } }
 }

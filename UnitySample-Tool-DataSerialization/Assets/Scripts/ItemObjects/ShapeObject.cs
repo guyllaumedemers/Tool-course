@@ -24,12 +24,6 @@ public class ShapeObject : MonoBehaviour
         SetMesh();
     }
 
-    private void Update()
-    {
-        if (dataInfo.GetPosition.GetY > 0)
-            UpdateDataInfo(ToCustomVector(this.transform.position), ToCustomColor(meshRenderer.material.color));
-    }
-
     public void UpdateDataInfo(MyVector3 position, MyColor color)
     {
         dataInfo.GetPosition = position;
@@ -53,7 +47,7 @@ public class ShapeObject : MonoBehaviour
         Destroy(go);
     }
 
-    private MyVector3 ToCustomVector(Vector3 pos)
+    public MyVector3 ToCustomVector(Vector3 pos)
     {
         MyVector3 myVector3 = new MyVector3();
         myVector3.GetX = pos.x;
@@ -63,7 +57,7 @@ public class ShapeObject : MonoBehaviour
         return myVector3;
     }
 
-    private MyColor ToCustomColor(Color color)
+    public MyColor ToCustomColor(Color color)
     {
         MyColor myColor = new MyColor();
         myColor.GetX = color.r;

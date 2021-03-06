@@ -250,7 +250,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   nb_shapes: 3
   prefab: {fileID: 788502822291779077, guid: df2ee008451367c46afe43ec399565e8, type: 3}
-  meshType: 0
+  meshType: 3
   materials:
   - {fileID: 2100000, guid: 49b2b16f49816c14b81a17f17e560d57, type: 2}
   - {fileID: 2100000, guid: dacbdbd21afc39d4f849f1b4277124ce, type: 2}

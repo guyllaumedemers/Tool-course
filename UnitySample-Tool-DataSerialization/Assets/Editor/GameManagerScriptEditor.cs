@@ -18,7 +18,7 @@ public class GameManagerScriptEditor : Editor
     private readonly string prefab_path = "prefab";
 
     private string[] enums;
-    private int index = 0;
+    private int index = 3;
 
     [Header("Constant values")]
     private const int MIN_VALUE = 0;
