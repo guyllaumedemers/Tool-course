@@ -6,6 +6,7 @@ using System.Runtime.Serialization.Formatters.Binary;
 using System.Runtime.Serialization;
 using System.Xml.Serialization;
 using System;
+using Newtonsoft.Json;
 
 public static class Serialization
 {
@@ -126,12 +127,40 @@ public static class Serialization
     #region JSON
     private static void SaveJSONFile()
     {
+        StreamWriter streamWriter = new StreamWriter(JSON_PATH, true);
+        try
+        {
+            JsonSerializer jsonSerializer = new JsonSerializer();
+            jsonSerializer.Serialize(streamWriter, GameManagerScript.Instance.GetContainer.GetDataInfos);
 
+        }
+        catch (SerializationException e)
+        {
+            Debug.Log("Failed to Serialize : " + e.Message);
+        }
+        finally
+        {
+            streamWriter.Close();
+        }
     }
 
     private static void LoadJSONFile()
     {
+        StreamReader streamReader = new StreamReader(JSON_PATH);
+        try
+        {
+            JsonSerializer jsonSerializer = new JsonSerializer();
+            GameManagerScript.Instance.GetContainer.GetDataInfos = (List<ShapeObjectDataInfo>)jsonSerializer.Deserialize(streamReader, typeof(List<ShapeObjectDataInfo>));
 
+        }
+        catch (DirectoryNotFoundException e)
+        {
+            Debug.Log("Directory not found : " + e.Message);
+        }
+        finally
+        {
+            streamReader.Close();
+        }
     }
     #endregion
 }
