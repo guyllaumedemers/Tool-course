@@ -28,13 +28,14 @@ public class GameManagerScript : MonoBehaviour
     [SerializeField] private int nb_shapes;
     [SerializeField] private EnumMeshType meshType;
     [SerializeField] private Material[] materials;
+    [SerializeField] private EnumSerializationType serializationType;
     private readonly int PLANE_WIDTH = 10;
     private readonly int PLANE_DEPTH = 10;
     private readonly int SPAWN_HEIGHT = 10;
 
     [Header("Database")]
     private List<GameObject> gameobject_list;
-    private List<ShapeObjectDataInfo> dataInfos;
+    private ShapeObjectContainer container;
 
     [Header("String path")]
     private readonly string MATERIAL_PATH = "Materials/";
@@ -42,21 +43,22 @@ public class GameManagerScript : MonoBehaviour
     private void Awake()
     {
         gameobject_list = new List<GameObject>();
+        container = new ShapeObjectContainer();
         materials = Resources.LoadAll<Material>(MATERIAL_PATH);
-        dataInfos = new List<ShapeObjectDataInfo>();
     }
 
     public void OnSerialization()
     {
-        if (dataInfos != null)
-            dataInfos = OnBeforeSerialization();
-        Serialization.SaveBinaryFile();
+        if (container != null)
+            container.GetDataInfos = OnBeforeSerialization();
+        Serialization.Save(serializationType);
     }
 
     public void OnDeserilization()
     {
-        Serialization.LoadBinaryFile();
-        if (dataInfos != null)
+        container.GetDataInfos.Clear();
+        Serialization.Load(serializationType);
+        if (container != null)
             InstanciateLoadedAsset();
     }
 
@@ -99,7 +101,7 @@ public class GameManagerScript : MonoBehaviour
 
     private void InstanciateLoadedAsset()
     {
-        foreach (var entries in dataInfos)
+        foreach (var entries in container.GetDataInfos)
         {
             GameObject go = OnDeserializationLoad(entries);
             gameobject_list?.Add(go);
@@ -169,8 +171,10 @@ public class GameManagerScript : MonoBehaviour
     #region PROPERTIES
     public EnumMeshType GetMeshType { get => meshType; set { meshType = value; } }
 
-    public Material[] GetMaterials { get => materials; }
+    public EnumSerializationType GetSerializationType { get => serializationType; set { serializationType = value; } }
 
-    public List<ShapeObjectDataInfo> GetDataInfos { get => dataInfos; set { dataInfos = value; } }
+    public ShapeObjectContainer GetContainer { get => container; set { container = value; } }
+
+    public Material[] GetMaterials { get => materials; }
     #endregion
 }

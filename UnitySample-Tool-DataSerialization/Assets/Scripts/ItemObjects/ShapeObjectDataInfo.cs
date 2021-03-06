@@ -2,6 +2,8 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Xml;
+using System.Xml.Serialization;
 
 [System.Serializable]
 public struct MyVector3
@@ -39,9 +41,13 @@ public struct MyColor
 public class ShapeObjectDataInfo
 {
     [Header("Object Information")]
+    [XmlAttribute("position")]
     [SerializeField] private MyVector3 position;
+    [XmlAttribute("color")]
     [SerializeField] private MyColor color;
+    [XmlAttribute("meshType")]
     [SerializeField] private EnumMeshType meshType;
+    [XmlAttribute("velocity")]
     [SerializeField] private MyVector3 velocity;
 
     public ShapeObjectDataInfo()
@@ -52,10 +58,10 @@ public class ShapeObjectDataInfo
         meshType = 0;
     }
 
-    public MyVector3 GetPosition { get => position; set { position = value; } }
-    public MyVector3 GetVelocity { get => velocity; set { velocity = value; } }
+    [XmlIgnore] public MyVector3 GetPosition { get => position; set { position = value; } }
+    [XmlIgnore] public MyVector3 GetVelocity { get => velocity; set { velocity = value; } }
 
-    public MyColor GetColor { get => color; set { color = value; } }
+    [XmlIgnore] public MyColor GetColor { get => color; set { color = value; } }
 
-    public EnumMeshType GetEnumType { get => meshType; set { meshType = value; } }
+    [XmlIgnore] public EnumMeshType GetEnumType { get => meshType; set { meshType = value; } }
 }
