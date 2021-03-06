@@ -4,11 +4,12 @@ using UnityEngine;
 using System.Xml;
 using System.Xml.Serialization;
 
+[System.Serializable]
 [XmlRoot("DataCollection")]
 public class ShapeObjectContainer
 {
-    [XmlArray("DataEntries")]
-    [XmlArrayItem("Data")]
+    [SerializeField]
+    [XmlArray("DataEntries"), XmlArrayItem("Data")]
     private List<ShapeObjectDataInfo> dataInfos;
 
     public ShapeObjectContainer()

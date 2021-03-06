@@ -41,14 +41,10 @@ public struct MyColor
 public class ShapeObjectDataInfo
 {
     [Header("Object Information")]
-    [XmlAttribute("position")]
-    [SerializeField] private MyVector3 position;
-    [XmlAttribute("color")]
-    [SerializeField] private MyColor color;
-    [XmlAttribute("meshType")]
-    [SerializeField] private EnumMeshType meshType;
-    [XmlAttribute("velocity")]
-    [SerializeField] private MyVector3 velocity;
+    public MyVector3 position;
+    public MyVector3 velocity;
+    public EnumMeshType meshType;
+    public MyColor color;
 
     public ShapeObjectDataInfo()
     {
@@ -58,10 +54,8 @@ public class ShapeObjectDataInfo
         meshType = 0;
     }
 
-    [XmlIgnore] public MyVector3 GetPosition { get => position; set { position = value; } }
-    [XmlIgnore] public MyVector3 GetVelocity { get => velocity; set { velocity = value; } }
-
-    [XmlIgnore] public MyColor GetColor { get => color; set { color = value; } }
-
-    [XmlIgnore] public EnumMeshType GetEnumType { get => meshType; set { meshType = value; } }
+    public MyVector3 GetPosition { get => position; set { position = value; } }
+    public MyVector3 GetVelocity { get => velocity; set { velocity = value; } }
+    public MyColor GetColor { get => color; set { color = value; } }
+    public EnumMeshType GetEnumType { get => meshType; set { meshType = value; } }
 }
