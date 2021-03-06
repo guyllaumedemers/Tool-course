@@ -16,7 +16,7 @@ public static class Serialization
         try
         {
             BinaryFormatter bf = new BinaryFormatter();
-            bf.Serialize(fs, GameManagerScript.Instance.GetShapeObjectDataInfos);
+            bf.Serialize(fs, GameManagerScript.Instance.GetDataInfos);
         }
         catch (SerializationException e)
         {
@@ -35,7 +35,7 @@ public static class Serialization
         try
         {
             BinaryFormatter bf = new BinaryFormatter();
-            GameManagerScript.Instance.GetShapeObjectDataInfos = (List<ShapeObjectDataInfo>)bf.Deserialize(fs);
+            GameManagerScript.Instance.GetDataInfos = (List<ShapeObjectDataInfo>)bf.Deserialize(fs);
         }
         catch (DirectoryNotFoundException e)
         {

@@ -42,15 +42,18 @@ public class ShapeObjectDataInfo
     [SerializeField] private MyVector3 position;
     [SerializeField] private MyColor color;
     [SerializeField] private EnumMeshType meshType;
+    [SerializeField] private MyVector3 velocity;
 
     public ShapeObjectDataInfo()
     {
         position = new MyVector3(0, 0, 0);
+        velocity = new MyVector3(0, 0, 0);
         color = new MyColor(1, 1, 1, 1);
         meshType = 0;
     }
 
     public MyVector3 GetPosition { get => position; set { position = value; } }
+    public MyVector3 GetVelocity { get => velocity; set { velocity = value; } }
 
     public MyColor GetColor { get => color; set { color = value; } }
 

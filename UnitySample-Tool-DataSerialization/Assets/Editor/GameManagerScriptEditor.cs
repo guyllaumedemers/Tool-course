@@ -43,7 +43,7 @@ public class GameManagerScriptEditor : Editor
         managerObj.Update();
 
         GUILayout.BeginVertical();
-        EditorGUILayout.ObjectField(prefabObject);
+        //EditorGUILayout.ObjectField(prefabObject);
         EditorGUILayout.PropertyField(nb_shapes, new GUIContent("Number Shapes"));
         if (nb_shapes.intValue < MIN_VALUE)
             nb_shapes.intValue = MIN_VALUE;
@@ -54,7 +54,7 @@ public class GameManagerScriptEditor : Editor
         GameManagerScript.Instance.GetMeshType = (EnumMeshType)index;
 
         if (GUILayout.Button(new GUIContent("Create"), GUILayout.ExpandWidth(true)))
-            GameManagerScript.Instance.InstanciateShapes((GameObject)prefabObject.objectReferenceValue, nb_shapes.intValue);
+            GameManagerScript.Instance.InstanciateShapes(nb_shapes.intValue);
 
         GUILayout.FlexibleSpace();
         GUILayout.BeginHorizontal();
