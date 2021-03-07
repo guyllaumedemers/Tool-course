@@ -16,6 +16,8 @@ public class PlayerController : MonoBehaviour
     private string MUZZLEFLASH_TAG = "MuzzleFlash";
     private string WEAPON_TAG = "Weapon";
     private string ARM_TAG = "Arm";
+    private string PLAYER_LAYER = "Player";
+    private string TERRAIN_LAYER = "Terrain";
 
     [Header("Animation Properties")]
     private string SIDEWAYS = "Sideways";
@@ -25,6 +27,7 @@ public class PlayerController : MonoBehaviour
     [Header("Player Information")]
     private Vector2 movement;
     private float speed = 5.0f;
+    private float bullet_speed = 4.0f;
 
     private void Awake()
     {
@@ -134,6 +137,7 @@ public class PlayerController : MonoBehaviour
 
     public void OnAttack(InputAction.CallbackContext value)
     {
-        Debug.Log("Fire");
+        if (value.started)
+            BulletFactory.Instance.InstanciateABullet(BulletType.RED, transform.position, movement, bullet_speed);
     }
 }
