@@ -26,8 +26,6 @@ public class BulletManager : MonoBehaviour
     [Header("Manager Informations")]
     [SerializeField] private HashSet<Bullet> bullets;
 
-    public HashSet<Bullet> GetBullets { get => bullets; set { bullets = value; } }
-
     private void Awake()
     {
         bullets = new HashSet<Bullet>();
@@ -40,4 +38,6 @@ public class BulletManager : MonoBehaviour
             b.UpdateBullet();
         }
     }
+
+    public HashSet<Bullet> GetBullets { get => bullets; set { bullets = value; } }
 }

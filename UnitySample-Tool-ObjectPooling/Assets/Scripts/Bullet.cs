@@ -7,8 +7,10 @@ public class Bullet : MonoBehaviour
 {
     [Header("Bullet Information")]
     [SerializeField] private Rigidbody2D rb2D;
-    private float bullet_speed;
+    [SerializeField] private float bullet_speed;
+    private bool dispose;
     private Vector2 bullet_direction;
+    private BulletType bulletType;
 
     private void Awake()
     {
@@ -17,14 +19,21 @@ public class Bullet : MonoBehaviour
         bullet_direction = new Vector2();
     }
 
-    public void InitilizeBullet(Vector2 direction, float speed)
+    public void InitilizeBullet(BulletType type, Vector2 direction, float speed)
     {
         bullet_speed = speed;
         bullet_direction = direction;
+        bulletType = type;
+        dispose = false;
     }
 
     public void UpdateBullet()
     {
+        // do a check to see if its inside the bounds of the camera
+        if (dispose)
+            Pool();
+        // update its position if it is
+        // otherwise pool the bullet
         rb2D.velocity += bullet_direction * bullet_speed * Time.fixedDeltaTime;
     }
 
@@ -34,13 +43,46 @@ public class Bullet : MonoBehaviour
             Pool();
     }
 
-    public void Pool()
+    private void OnBecameInvisible()
     {
-        // add the bullet to the pool of the Object Pool
+        dispose = true;
     }
 
-    public void Depool()
+    public void Pool()
+    {
+        HashSet<Bullet> bullets = BulletManager.Instance.GetBullets;
+        if (bullets.Contains(this))
+            ObjectPooling.Instance.Pool(GetBullet(bullets));
+        bullets.Remove(this);
+    }
+
+    public Bullet Depool()
     {
         // remove the bullet from the Object Pool and Initialize its components values
+        List<Bullet> bullets = ObjectPooling.Instance.GetBullets;
+        foreach (Bullet b in bullets)
+        {
+            if (b.Equals(this))
+                return b.Reset();
+        }
+        return null;
     }
+
+    private Bullet Reset()
+    {
+
+        return new Bullet();
+    }
+
+    private Bullet GetBullet(HashSet<Bullet> bullets)
+    {
+        foreach (Bullet b in bullets)
+        {
+            if (b.Equals(this))
+                return b;
+        }
+        return null;
+    }
+
+    public BulletType GetBulletType { get => bulletType; set { bulletType = value; } }
 }

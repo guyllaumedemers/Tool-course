@@ -47,14 +47,29 @@ public class BulletFactory : MonoBehaviour
 
     public Bullet InstanciateABullet(BulletType bulletType, Vector2 position, Vector2 direction, float speed)
     {
-        // Create a bullet from prefab Dict<>
+        ///// Check if the bullet exist inside the Object Pool
+        Bullet bullet = new Bullet();
+        bullet = ObjectPooling.Instance.Depool(bulletType);
+        //// If it doesnt exist instanciate a new Gameobject
+        if (bullet != null)
+            BulletManager.Instance.GetBullets.Add(bullet);
+        else
+            bullet = CreateABullet(bulletType, position, direction, speed);
+        return bullet;
+    }
+
+    private Bullet CreateABullet(BulletType bulletType, Vector2 position, Vector2 direction, float speed)
+    {
+        //// Instanciate a gameobject of the Bullet
         GameObject go = Instantiate(bulletPrefabsTypes[bulletType], position, Quaternion.identity);
         go.AddComponent<Bullet>();
+        //// Add Bullet Component to the gameobject
         Bullet bullet = go.GetComponent<Bullet>();
-        // Initialize its components values
-        bullet.InitilizeBullet(direction, speed);
-        // Add the bullet to the bullet manager
+        //// Initialize the gameobject variables
+        bullet.InitilizeBullet(bulletType, direction, speed);
+        //// add the Bullet to the BulletManager Script
         BulletManager.Instance.GetBullets.Add(bullet);
+        //// Return the bullet
         return bullet;
     }
 }
