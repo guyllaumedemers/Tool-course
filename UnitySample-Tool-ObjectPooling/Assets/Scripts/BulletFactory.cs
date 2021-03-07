@@ -48,8 +48,7 @@ public class BulletFactory : MonoBehaviour
     public Bullet InstanciateABullet(BulletType bulletType, Vector2 position, Vector2 direction, float speed)
     {
         ///// Check if the bullet exist inside the Object Pool
-        Bullet bullet = new Bullet();
-        bullet = ObjectPooling.Instance.Depool(bulletType);
+        Bullet bullet = ObjectPooling.Instance.Depool(bulletType, position, direction, speed);
         //// If it doesnt exist instanciate a new Gameobject
         if (bullet != null)
             BulletManager.Instance.GetBullets.Add(bullet);
@@ -66,7 +65,7 @@ public class BulletFactory : MonoBehaviour
         //// Add Bullet Component to the gameobject
         Bullet bullet = go.GetComponent<Bullet>();
         //// Initialize the gameobject variables
-        bullet.InitilizeBullet(bulletType, direction, speed);
+        bullet.InitilizeBullet(bulletType, position, direction, speed);
         //// add the Bullet to the BulletManager Script
         BulletManager.Instance.GetBullets.Add(bullet);
         //// Return the bullet

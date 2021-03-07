@@ -24,7 +24,7 @@ public class ObjectPooling : MonoBehaviour
     }
 
     [Header("Pool Stack")]
-    private List<Bullet> bullets;
+    [SerializeField] private List<Bullet> bullets;
 
     private void Awake()
     {
@@ -34,15 +34,14 @@ public class ObjectPooling : MonoBehaviour
     public void Pool(Bullet bullet)
     {
         bullets.Add(bullet);
-        bullet.gameObject.SetActive(false);
     }
 
-    public Bullet Depool(BulletType bulletType)
+    public Bullet Depool(BulletType bulletType, Vector2 position, Vector2 direction, float speed)
     {
         foreach (Bullet b in bullets)
         {
             if (b.GetBulletType.Equals(bulletType))
-                return b.Depool();
+                return b.Depool(bulletType, position, direction, speed);
         }
         return null;
     }

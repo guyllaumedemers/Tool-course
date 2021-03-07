@@ -31,7 +31,7 @@ public class BulletManager : MonoBehaviour
         bullets = new HashSet<Bullet>();
     }
 
-    private void FixedUpdate()
+    private void Update()
     {
         foreach (Bullet b in bullets)
         {

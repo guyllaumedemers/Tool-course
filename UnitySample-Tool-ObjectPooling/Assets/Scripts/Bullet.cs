@@ -9,32 +9,37 @@ public class Bullet : MonoBehaviour
     [SerializeField] private Rigidbody2D rb2D;
     [SerializeField] private float bullet_speed;
     private bool dispose;
-    private Vector2 bullet_direction;
     private BulletType bulletType;
+    private Vector2 bullet_direction;
+    private Vector2 bullet_position;
 
     private void Awake()
     {
         rb2D = GetComponent<Rigidbody2D>();
+        bullet_position = new Vector2();
         bullet_speed = 0;
         bullet_direction = new Vector2();
     }
 
-    public void InitilizeBullet(BulletType type, Vector2 direction, float speed)
+    private void FixedUpdate()
     {
-        bullet_speed = speed;
-        bullet_direction = direction;
-        bulletType = type;
+        rb2D.velocity += bullet_direction * bullet_speed * Time.fixedDeltaTime;
+    }
+
+    public void InitilizeBullet(BulletType type, Vector2 position, Vector2 direction, float speed)
+    {
         dispose = false;
+        bullet_speed = speed;
+        bulletType = type;
+        bullet_position = position;
+        bullet_direction = direction;
     }
 
     public void UpdateBullet()
     {
-        // do a check to see if its inside the bounds of the camera
+        //// Check if the Bullet is Rendered by the Camera
         if (dispose)
             Pool();
-        // update its position if it is
-        // otherwise pool the bullet
-        rb2D.velocity += bullet_direction * bullet_speed * Time.fixedDeltaTime;
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -53,25 +58,21 @@ public class Bullet : MonoBehaviour
         HashSet<Bullet> bullets = BulletManager.Instance.GetBullets;
         if (bullets.Contains(this))
             ObjectPooling.Instance.Pool(GetBullet(bullets));
+        //// We remove the Bullet from the BulletManager
         bullets.Remove(this);
+        //// need to set inactive the gameobject
+        this.gameObject.SetActive(false);
     }
 
-    public Bullet Depool()
+    public Bullet Depool(BulletType bulletType, Vector2 position, Vector2 direction, float speed)
     {
-        // remove the bullet from the Object Pool and Initialize its components values
-        List<Bullet> bullets = ObjectPooling.Instance.GetBullets;
-        foreach (Bullet b in bullets)
-        {
-            if (b.Equals(this))
-                return b.Reset();
-        }
-        return null;
-    }
-
-    private Bullet Reset()
-    {
-
-        return new Bullet();
+        //// We Re-Enable the Bullet Gameobject
+        this.gameObject.SetActive(true);
+        //// It Initialize the bullets Componenets
+        InitilizeBullet(bulletType, position, direction, speed);
+        //// It removes the bullet from the Object Pool Stack<>
+        ObjectPooling.Instance.GetBullets.Remove(this);
+        return this;
     }
 
     private Bullet GetBullet(HashSet<Bullet> bullets)

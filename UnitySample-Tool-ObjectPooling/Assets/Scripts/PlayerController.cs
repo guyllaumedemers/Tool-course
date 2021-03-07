@@ -46,6 +46,7 @@ public class PlayerController : MonoBehaviour
         Move();
     }
 
+    #region PLAYER LOGIC
     private void Animate()
     {
         UpdateAnimationClips(WEAPON_TAG, ARM_TAG);
@@ -121,6 +122,7 @@ public class PlayerController : MonoBehaviour
         }
         renderer.sprite = gun_sprites[0];
     }
+    #endregion
 
     private void Move()
     {
