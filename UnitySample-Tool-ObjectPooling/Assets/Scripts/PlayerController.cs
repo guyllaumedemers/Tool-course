@@ -5,6 +5,25 @@ using UnityEngine.InputSystem;
 
 public class PlayerController : MonoBehaviour
 {
+    private static PlayerController instance;
+    public static PlayerController Instance
+    {
+        get
+        {
+            if (instance == null)
+            {
+                instance = FindObjectOfType<PlayerController>();
+                if (instance == null)
+                {
+                    GameObject go = new GameObject();
+                    instance = go.AddComponent<PlayerController>();
+                    DontDestroyOnLoad(go);
+                }
+            }
+            return instance;
+        }
+    }
+
     [Header("Requiered Components")]
     [SerializeField] private PlayerInput playerInput;
     [SerializeField] private Rigidbody2D rb2D;
@@ -26,6 +45,7 @@ public class PlayerController : MonoBehaviour
     private Vector2 movement;
     private float speed = 5.0f;
     private float bullet_speed = 2.0f;
+    [SerializeField] private BulletType bulletType;
 
     private void Awake()
     {
@@ -138,6 +158,8 @@ public class PlayerController : MonoBehaviour
     public void OnAttack(InputAction.CallbackContext value)
     {
         if (value.started && movement != Vector2.zero)
-            BulletFactory.Instance.InstanciateABullet(BulletType.RED, gun_transform.position, movement, bullet_speed);
+            BulletFactory.Instance.InstanciateABullet(bulletType, gun_transform.position, movement, bullet_speed);
     }
+
+    public BulletType GetBulletType { get => bulletType; set { bulletType = value; } }
 }
