@@ -79,17 +79,10 @@ public class Bullet : MonoBehaviour
 
     private Bullet GetBullet(HashSet<Bullet> bullets)
     {
-        try
+        foreach (Bullet b in bullets)
         {
-            foreach (Bullet b in bullets)
-            {
-                if (b.Equals(this))
-                    return b;
-            }
-        }
-        catch (InvalidOperationException e)
-        {
-            Debug.Log("Invalid Operation Exception : " + e.Message);
+            if (b.Equals(this))
+                return b;
         }
         return null;
     }

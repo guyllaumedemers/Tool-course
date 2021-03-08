@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -33,9 +34,16 @@ public class BulletManager : MonoBehaviour
 
     private void Update()
     {
-        foreach (Bullet b in bullets)
+        try
         {
-            b.UpdateBullet();
+            foreach (Bullet b in bullets)
+            {
+                b.UpdateBullet();
+            }
+        }
+        catch (InvalidOperationException e)
+        {
+            Debug.Log("Invalid Operation Exception : " + e.Message);
         }
     }
 
