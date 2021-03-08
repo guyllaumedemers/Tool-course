@@ -11,13 +11,11 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private SpriteRenderer[] spriteRenderers;
     [SerializeField] private Sprite[] gun_sprites;
     [SerializeField] private Animator animator;
+    [SerializeField] private Transform gun_transform;
 
     [Header("Attach Objects")]
-    private string MUZZLEFLASH_TAG = "MuzzleFlash";
     private string WEAPON_TAG = "Weapon";
     private string ARM_TAG = "Arm";
-    private string PLAYER_LAYER = "Player";
-    private string TERRAIN_LAYER = "Terrain";
 
     [Header("Animation Properties")]
     private string SIDEWAYS = "Sideways";
@@ -27,7 +25,7 @@ public class PlayerController : MonoBehaviour
     [Header("Player Information")]
     private Vector2 movement;
     private float speed = 5.0f;
-    private float bullet_speed = 4.0f;
+    private float bullet_speed = 2.0f;
 
     private void Awake()
     {
@@ -139,7 +137,7 @@ public class PlayerController : MonoBehaviour
 
     public void OnAttack(InputAction.CallbackContext value)
     {
-        if (value.started)
-            BulletFactory.Instance.InstanciateABullet(BulletType.RED, transform.position, movement, bullet_speed);
+        if (value.started && movement != Vector2.zero)
+            BulletFactory.Instance.InstanciateABullet(BulletType.RED, gun_transform.position, movement, bullet_speed);
     }
 }

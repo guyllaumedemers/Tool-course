@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -11,19 +12,20 @@ public class Bullet : MonoBehaviour
     private bool dispose;
     private BulletType bulletType;
     private Vector2 bullet_direction;
-    private Vector2 bullet_position;
+    private string LAYER_MASK = "Bullets";
 
     private void Awake()
     {
         rb2D = GetComponent<Rigidbody2D>();
-        bullet_position = new Vector2();
         bullet_speed = 0;
         bullet_direction = new Vector2();
+        this.gameObject.layer = LayerMask.NameToLayer(LAYER_MASK);
     }
 
     private void FixedUpdate()
     {
-        rb2D.velocity += bullet_direction * bullet_speed * Time.fixedDeltaTime;
+        //rb2D.AddRelativeForce(bullet_direction * bullet_speed, ForceMode2D.Impulse);
+        rb2D.velocity += bullet_direction * bullet_speed;
     }
 
     public void InitilizeBullet(BulletType type, Vector2 position, Vector2 direction, float speed)
@@ -31,7 +33,7 @@ public class Bullet : MonoBehaviour
         dispose = false;
         bullet_speed = speed;
         bulletType = type;
-        bullet_position = position;
+        this.transform.position = position;
         bullet_direction = direction;
     }
 
@@ -77,10 +79,17 @@ public class Bullet : MonoBehaviour
 
     private Bullet GetBullet(HashSet<Bullet> bullets)
     {
-        foreach (Bullet b in bullets)
+        try
         {
-            if (b.Equals(this))
-                return b;
+            foreach (Bullet b in bullets)
+            {
+                if (b.Equals(this))
+                    return b;
+            }
+        }
+        catch (InvalidOperationException e)
+        {
+            Debug.Log("Invalid Operation Exception : " + e.Message);
         }
         return null;
     }
