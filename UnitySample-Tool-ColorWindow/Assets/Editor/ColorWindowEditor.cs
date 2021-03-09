@@ -179,7 +179,8 @@ public class ColorWindow : EditorWindow
         if ((evt.type == EventType.MouseDown || evt.type == EventType.MouseDrag) && colorRect.Contains(evt.mousePosition)) //Can now paint while dragging update
         {
             if (evt.button == 0)                //If mouse button pressed is left
-                PaintFill(evt, colorRect, i, j);
+                RecursivePaintFill(i, j);
+            //PaintFill(i, j);                  //Option where the paint fill use AStar to fill to a specific range(definite by mouse click)
             //colors[i, j] = GetColor;          //Set the color of the index
             else
                 colors[i, j] = eraseColor;      //Set the color of the index
@@ -187,6 +188,24 @@ public class ColorWindow : EditorWindow
         }
     }
 
+    private void RecursivePaintFill(int i, int j)
+    {
+        if (colors[i, j] == selectedColor)
+            return;
+        RecursiveFill(colors[i, j], i, j);
+    }
+
+    private void RecursiveFill(Color toUpdate, int i, int j)
+    {
+        if (i < 0 || i >= width || j < 0 || j >= height || colors[i, j] != toUpdate)
+            return;
+
+        colors[i, j] = selectedColor;
+        RecursiveFill(toUpdate, i - 1, j);
+        RecursiveFill(toUpdate, i + 1, j);
+        RecursiveFill(toUpdate, i, j - 1);
+        RecursiveFill(toUpdate, i, j + 1);
+    }
 
     private void FillMatrix()
     {
@@ -206,7 +225,7 @@ public class ColorWindow : EditorWindow
             colors[(int)v.x, (int)v.y] = selectedColor;
         }
     }
-    private void PaintFill(Event evt, Rect colorRect, int i, int j)
+    private void PaintFill(int i, int j)
     {
         if (colors[i, j] != eraseColor)
         {
