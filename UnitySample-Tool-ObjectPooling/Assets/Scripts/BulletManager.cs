@@ -25,27 +25,20 @@ public class BulletManager : MonoBehaviour
     }
 
     [Header("Manager Informations")]
-    [SerializeField] private HashSet<Bullet> bullets;
+    [SerializeField] private List<Bullet> bullets;
 
     private void Awake()
     {
-        bullets = new HashSet<Bullet>();
+        bullets = new List<Bullet>();
     }
 
     private void Update()
     {
-        try
+        for (int i = bullets.Count - 1; i >= 0; i--)
         {
-            foreach (Bullet b in bullets)
-            {
-                b.UpdateBullet();
-            }
-        }
-        catch (InvalidOperationException e)
-        {
-            Debug.Log("Invalid Operation Exception : " + e.Message);
+            bullets[i].UpdateBullet();
         }
     }
 
-    public HashSet<Bullet> GetBullets { get => bullets; set { bullets = value; } }
+    public List<Bullet> GetBullets { get => bullets; set { bullets = value; } }
 }

@@ -57,7 +57,7 @@ public class Bullet : MonoBehaviour
 
     public void Pool()
     {
-        HashSet<Bullet> bullets = BulletManager.Instance.GetBullets;
+        List<Bullet> bullets = BulletManager.Instance.GetBullets;
         if (bullets.Contains(this))
             ObjectPooling.Instance.Pool(GetBullet(bullets));
         //// We remove the Bullet from the BulletManager
@@ -77,7 +77,7 @@ public class Bullet : MonoBehaviour
         return this;
     }
 
-    private Bullet GetBullet(HashSet<Bullet> bullets)
+    private Bullet GetBullet(List<Bullet> bullets)
     {
         foreach (Bullet b in bullets)
         {
