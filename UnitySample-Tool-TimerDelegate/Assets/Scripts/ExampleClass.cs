@@ -8,14 +8,14 @@ using UnityEngine;
 
 public class ExampleClass : MonoBehaviour
 {
-    Stopwatch stopwatch = new Stopwatch();
-
-    private void Awake()
+    Stopwatch stopwatch;
+    private void Start()
     {
+        stopwatch = new Stopwatch();
         //Timer.Instance.AddTimerListener(() => { ResetTimer(); });
-        Timer.Instance.AddTimerListener(() => { stopwatch.Start(); UnityEngine.Debug.Log($"START TIME : {stopwatch.ElapsedMilliseconds / 1000}"); });
+        Timer.Instance.AddTimerListener(() => { StartTime(); });
         Timer.Instance.AddTimerListener(() => { TimeElapse(3000); });
-        Timer.Instance.AddTimerListener(() => { EndTime(5000); stopwatch.Stop(); });
+        Timer.Instance.AddTimerListener(() => { EndTime(5000); });
     }
 
     private void ResetTimer()
@@ -23,6 +23,12 @@ public class ExampleClass : MonoBehaviour
         //// not async function since we want it to delay the callback process so we are sure the timer is reset before the other functions
         ///  gets processed on the other threads
         stopwatch.Reset();
+    }
+
+    private async void StartTime()
+    {
+        stopwatch.Start();
+        await Task.Run(() => { UnityEngine.Debug.Log($"START TIME : {stopwatch.ElapsedMilliseconds / 1000}"); });
     }
 
     private async void TimeElapse(int timeMs)
@@ -33,5 +39,6 @@ public class ExampleClass : MonoBehaviour
     private async void EndTime(int timeMs)
     {
         await Task.Run(() => { Thread.Sleep(timeMs); UnityEngine.Debug.Log($"END TIME : {stopwatch.ElapsedMilliseconds / 1000}"); });
+        stopwatch.Stop();
     }
 }

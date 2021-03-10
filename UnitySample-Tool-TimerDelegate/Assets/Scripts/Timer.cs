@@ -7,7 +7,6 @@ using UnityEngine;
 public class Timer : MonoBehaviour
 {
     private static Timer instance;
-
     public static Timer Instance
     {
         get
@@ -30,6 +29,11 @@ public class Timer : MonoBehaviour
     public event OnTimerDel OnTimerEvent;
 
     private bool isInit = false;
+
+    private void Awake()
+    {
+        OnTimerEvent = null;
+    }
 
     private void Update()
     {
