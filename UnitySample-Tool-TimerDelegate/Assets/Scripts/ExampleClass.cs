@@ -12,9 +12,17 @@ public class ExampleClass : MonoBehaviour
 
     private void Awake()
     {
+        //Timer.Instance.AddTimerListener(() => { ResetTimer(); });
         Timer.Instance.AddTimerListener(() => { stopwatch.Start(); UnityEngine.Debug.Log($"START TIME : {stopwatch.ElapsedMilliseconds / 1000}"); });
         Timer.Instance.AddTimerListener(() => { TimeElapse(3000); });
-        Timer.Instance.AddTimerListener(() => { stopwatch.Stop(); EndTime(5000); });
+        Timer.Instance.AddTimerListener(() => { EndTime(5000); stopwatch.Stop(); });
+    }
+
+    private void ResetTimer()
+    {
+        //// not async function since we want it to delay the callback process so we are sure the timer is reset before the other functions
+        ///  gets processed on the other threads
+        stopwatch.Reset();
     }
 
     private async void TimeElapse(int timeMs)
