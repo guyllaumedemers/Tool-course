@@ -9,11 +9,7 @@ public class AnimationCurveDrawerEditor : PropertyDrawer
     private readonly string ANIMATION_CURVE_STRING = "animationCurve";
     private readonly string CUSTOM_VECTOR2_X = "xRange";
     private readonly string CUSTOM_VECTOR2_Y = "yRange";
-
-    private readonly float xMin = 0;
-    private readonly float xMax = 10;
-    private readonly float yMin = 0;
-    private readonly float yMax = 10;
+    float lastKeyTime = 0;
 
     public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
     {
@@ -27,9 +23,6 @@ public class AnimationCurveDrawerEditor : PropertyDrawer
         Rect[,] rects = CompactSingleRow.GetGrid(1, 3, position.position, position.width, position.height);
 
         p_curve.animationCurveValue = EditorGUI.CurveField(rects[0, 0], new GUIContent("Anim V2"), p_curve.animationCurveValue);
-
-        float[] xRange = CompactSingleRow.UnpackVector2(p_xRange.vector2Value);
-        float[] yRange = CompactSingleRow.UnpackVector2(p_yRange.vector2Value);
 
         Rect compact_xRange = rects[0, 1];
         Rect compact_yRange = rects[0, 2];
@@ -52,10 +45,5 @@ public class AnimationCurveDrawerEditor : PropertyDrawer
         //EditorGUI.MultiFloatField(rects[0, 2], new GUIContent(""), new GUIContent[] { new GUIContent("yMin"), new GUIContent("yMax") }, yRange);
 
         EditorGUI.EndProperty();
-    }
-
-    public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
-    {
-        return base.GetPropertyHeight(property, label);
     }
 }

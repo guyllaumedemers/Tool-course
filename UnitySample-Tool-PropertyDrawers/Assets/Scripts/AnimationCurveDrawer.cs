@@ -8,4 +8,6 @@ public class AnimationCurveDrawer
     [SerializeField] private AnimationCurve animationCurve;
     [SerializeField] private Vector2 xRange;
     [SerializeField] private Vector2 yRange;
+
+    public AnimationCurve GetAnimationCurve { get => animationCurve; set { animationCurve = value; } }
 }
