@@ -12,13 +12,21 @@ public class SpawnSpotObjectEditor : Editor
     readonly string TYPE_NAME = "monster_typeName";
     readonly string TYPE_ENUM = "monsterType_enum";
     string[] names;
-    int index = 0;
+    int current_index = -1;
 
     public void OnEnable()
     {
         BasicInitialization();
-        ///// Set the name of the monster at first initialization to be use in the spawnspot object
-        spawnspot_selectTypeName.stringValue = names[2];
+        current_index = GetIndex(names, spawnspot_selectTypeName.stringValue);
+        if (current_index == -1)
+        {
+            current_index = 0;
+            SetMonsterName(names[current_index]);
+        }
+        else
+        {
+            SetMonsterName(names[current_index]);
+        }
     }
 
     public override void OnInspectorGUI()
@@ -27,11 +35,11 @@ public class SpawnSpotObjectEditor : Editor
         //// FIRST => Update the Serialize Object
         spawnspot_obj.Update();
 
-        EditorGUILayout.PropertyField(spawnspot_selectTypeName, new GUIContent("Monster Name"));
+        //EditorGUILayout.PropertyField(spawnspot_selectTypeName, new GUIContent("Monster Name")); /// Debugging purposes only
+        current_index = EditorGUILayout.Popup(new GUIContent("Monster Type"), current_index, names);
 
-        index = EditorGUILayout.Popup(new GUIContent("Monster Type"), index, names);
-        //spawnspot_selectTypeName.stringValue = names[index];
-
+        //// Set the string value after monter type select
+        SetMonsterName(names[current_index]);
 
         //// LAST => Applies Modifies Properties of the Serialize Object
         spawnspot_obj.ApplyModifiedProperties();
@@ -41,13 +49,38 @@ public class SpawnSpotObjectEditor : Editor
     {
         spawnspot_obj = new SerializedObject(target);
         ///// Retrieve the enum names
-        names = spawnspot_obj.FindProperty(TYPE_ENUM).enumNames;
+        //names = spawnspot_obj.FindProperty(TYPE_ENUM).enumNames; /// Need to be fill from a folder instead
+
+        names = GetFilesFromDirectory(Application.dataPath + "/Scripts/_MonsterType/");
+
         ///// Retrieve the name of the monster from spawnspot object
         spawnspot_selectTypeName = spawnspot_obj.FindProperty(TYPE_NAME);
     }
 
-    private void SetMonsterName(string myName)
+    private void SetMonsterName(string name)
     {
-        ((SpawnSpotObject)target).monster_typeName = myName;
+        ((SpawnSpotObject)target).monster_typeName = name;
+        ((SpawnSpotObject)target).gameObject.name = $"SpawnSpot {name}";
+    }
+
+    private int GetIndex(string[] names, string name)
+    {
+        for (int i = 0; i < names.Length; i++)
+        {
+            if (names[i].Equals(name))
+                return i;
+        }
+        return -1;
+    }
+
+    private string[] GetFilesFromDirectory(string path)
+    {
+        names = Directory.GetFiles(path, "*.cs");
+
+        for (int i = 0; i < names.Length; i++)
+        {
+            names[i] = Path.GetFileNameWithoutExtension(names[i]);
+        }
+        return names;
     }
 }
