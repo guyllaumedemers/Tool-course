@@ -26,6 +26,6 @@ public class ToolManager : MonoBehaviour
 
     private void Start()
     {
-        Debug.Log("Evaluate : " + animationCurveInstance.GetAnimationCurve.Evaluate(5));
+        Debug.Log("Evaluate : " + animationCurveInstance.Evaluate(5));
     }
 }

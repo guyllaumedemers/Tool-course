@@ -9,5 +9,10 @@ public class AnimationCurveDrawer
     [SerializeField] private Vector2 xRange;
     [SerializeField] private Vector2 yRange;
 
-    public AnimationCurve GetAnimationCurve { get => animationCurve; set { animationCurve = value; } }
+    public float Evaluate(float time)
+    {
+        if (xRange != null && yRange != null)
+            return animationCurve.Evaluate(time / xRange.y) * yRange.y;
+        return -1;
+    }
 }

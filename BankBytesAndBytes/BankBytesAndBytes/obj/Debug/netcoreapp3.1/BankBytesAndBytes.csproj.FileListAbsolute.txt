@@ -1,0 +1,13 @@
+C:\Users\gdemers\Documents\GitHub\Tool-course\BankBytesAndBytes\BankBytesAndBytes\bin\Debug\netcoreapp3.1\BankBytesAndBytes.exe
+C:\Users\gdemers\Documents\GitHub\Tool-course\BankBytesAndBytes\BankBytesAndBytes\bin\Debug\netcoreapp3.1\BankBytesAndBytes.deps.json
+C:\Users\gdemers\Documents\GitHub\Tool-course\BankBytesAndBytes\BankBytesAndBytes\bin\Debug\netcoreapp3.1\BankBytesAndBytes.runtimeconfig.json
+C:\Users\gdemers\Documents\GitHub\Tool-course\BankBytesAndBytes\BankBytesAndBytes\bin\Debug\netcoreapp3.1\BankBytesAndBytes.runtimeconfig.dev.json
+C:\Users\gdemers\Documents\GitHub\Tool-course\BankBytesAndBytes\BankBytesAndBytes\bin\Debug\netcoreapp3.1\BankBytesAndBytes.dll
+C:\Users\gdemers\Documents\GitHub\Tool-course\BankBytesAndBytes\BankBytesAndBytes\bin\Debug\netcoreapp3.1\BankBytesAndBytes.pdb
+C:\Users\gdemers\Documents\GitHub\Tool-course\BankBytesAndBytes\BankBytesAndBytes\obj\Debug\netcoreapp3.1\BankBytesAndBytes.csprojAssemblyReference.cache
+C:\Users\gdemers\Documents\GitHub\Tool-course\BankBytesAndBytes\BankBytesAndBytes\obj\Debug\netcoreapp3.1\BankBytesAndBytes.AssemblyInfoInputs.cache
+C:\Users\gdemers\Documents\GitHub\Tool-course\BankBytesAndBytes\BankBytesAndBytes\obj\Debug\netcoreapp3.1\BankBytesAndBytes.AssemblyInfo.cs
+C:\Users\gdemers\Documents\GitHub\Tool-course\BankBytesAndBytes\BankBytesAndBytes\obj\Debug\netcoreapp3.1\BankBytesAndBytes.csproj.CoreCompileInputs.cache
+C:\Users\gdemers\Documents\GitHub\Tool-course\BankBytesAndBytes\BankBytesAndBytes\obj\Debug\netcoreapp3.1\BankBytesAndBytes.dll
+C:\Users\gdemers\Documents\GitHub\Tool-course\BankBytesAndBytes\BankBytesAndBytes\obj\Debug\netcoreapp3.1\BankBytesAndBytes.pdb
+C:\Users\gdemers\Documents\GitHub\Tool-course\BankBytesAndBytes\BankBytesAndBytes\obj\Debug\netcoreapp3.1\BankBytesAndBytes.genruntimeconfig.cache
