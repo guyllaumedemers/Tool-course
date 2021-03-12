@@ -309,7 +309,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1169651953}
   - component: {fileID: 1169651954}
-  - component: {fileID: 1169651955}
   m_Layer: 0
   m_Name: Timer
   m_TagString: Untagged
@@ -341,17 +340,5 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e49a733d696167b4c9295e12de7a8f68, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &1169651955
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1169651952}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2091ce928e2c0464181913f31a0b6437, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 

@@ -28,20 +28,21 @@ public class Timer : MonoBehaviour
     }
 
     public delegate void OnTimerDel();
-    public event OnTimerDel OnTimerEvent;
+    public event OnTimerDel onTimerEvent;
 
     private bool isInit = false;
 
     Stopwatch stopwatch;
 
+
     private void Awake()
     {
-        OnTimerEvent = null;
+        onTimerEvent = null;
         stopwatch = new Stopwatch();
         //Timer.Instance.AddTimerListener(() => { ResetTimer(); });
-        Timer.Instance.AddTimerListener(() => { StartTime(); });
-        Timer.Instance.AddTimerListener(() => { TimeElapse(3000); });
-        Timer.Instance.AddTimerListener(() => { EndTime(5000); });
+        AddTimerListener(() => { StartTime(); });
+        AddTimerListener(() => { TimeElapse(3000); });
+        AddTimerListener(() => { EndTime(5000); });
     }
 
     private void Update()
@@ -50,7 +51,7 @@ public class Timer : MonoBehaviour
         {
             //// Invoking inside the update to get pass the delay between the start method call and the update method call
             if (!isInit)
-                OnTimerEvent?.Invoke(); isInit = true;
+                onTimerEvent?.Invoke(); isInit = true;
         }
         catch (System.Exception e)
         {
@@ -60,7 +61,7 @@ public class Timer : MonoBehaviour
 
     public void AddTimerListener(OnTimerDel myFunc)
     {
-        OnTimerEvent += myFunc;
+        onTimerEvent += myFunc;
     }
 
     private void ResetTimer()
