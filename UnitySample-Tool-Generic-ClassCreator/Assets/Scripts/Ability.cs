@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Monster : MonoBehaviour
+public abstract class Ability
 {
-    public List<Ability> abilities;
+    public abstract void CastAbility();
 }
