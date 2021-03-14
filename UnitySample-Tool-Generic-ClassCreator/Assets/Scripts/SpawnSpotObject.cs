@@ -8,7 +8,7 @@ public class SpawnSpotObject : MonoBehaviour
     public string monster_typeName;
     //public MonsterType monsterType_enum;
     public int ability_mask;
-    readonly int layer_offset = 5;
+    readonly int layer_offset = 6;
 
     private void Awake()
     {
@@ -42,7 +42,8 @@ public class SpawnSpotObject : MonoBehaviour
         ///// PROBLEM => If we do a mixed selection, our layer int value result might also be the value of another layer int
         ///// HOW do we go from mixted values to a stringArr?
         Debug.Log($"Mask int : {mask}");
-        Debug.Log($"Layer Name {LayerMask.LayerToName(mask + layer_offset)}");
+        //Debug.Log($"Log value : {(int)Mathf.Log(mask, 2)}");
+        Debug.Log($"Mask Name : {LayerMask.LayerToName((int)Mathf.Log(mask, 2) + layer_offset)}");
 
         return monster;
     }
