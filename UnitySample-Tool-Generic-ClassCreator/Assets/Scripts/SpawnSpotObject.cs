@@ -73,7 +73,6 @@ public class SpawnSpotObject : MonoBehaviour
     private Type GetLayerType(int log)
     {
         Type type = Type.GetType(LayerMask.LayerToName(log + layer_offset));
-        Debug.Log($"Type {type}");
         return type;
     }
 
@@ -82,9 +81,12 @@ public class SpawnSpotObject : MonoBehaviour
         int log = (int)Mathf.Log(newMask, bit_value);
         int pow = (int)Mathf.Pow(bit_value, log);
 
+        int remains_log = (int)Mathf.Log(remains, bit_value);
+        int remains_pow = (int)Mathf.Pow(bit_value, remains_log);
+
         if (newMask == pow)
-            abilities?.Add(System.Activator.CreateInstance(GetLayerType(newMask)) as Ability);
+            abilities?.Add(System.Activator.CreateInstance(GetLayerType(log)) as Ability);
         if (remains > 0)
-            RecursiveSearch(remains, log, pow, abilities);
+            RecursiveSearch(remains, remains_log, remains_pow, abilities);
     }
 }
