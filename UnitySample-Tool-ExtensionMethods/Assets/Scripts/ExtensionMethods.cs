@@ -29,10 +29,10 @@ public static class ExtensionMethods
         return result;
     }
 
-    public static Vector2 Rotate(this Vector2 myVec2)
+    public static Vector2 Rotate(this Vector2 myVec2, int angle)
     {
-
-        return new Vector2();
+        float rad = (Mathf.PI / 180) * angle;
+        return new Vector2((myVec2.x * Mathf.Cos(rad)) - (myVec2.y * Mathf.Sin(rad)), (myVec2.x * Mathf.Sin(rad)) + (myVec2.y * Mathf.Cos(rad)));
     }
 
     public delegate bool PredicateDel<T>(T value);
