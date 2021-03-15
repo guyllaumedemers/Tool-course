@@ -466,7 +466,7 @@ GameObject:
   - component: {fileID: 1745024505}
   - component: {fileID: 1745024506}
   m_Layer: 0
-  m_Name: SpawnSpot Peanut
+  m_Name: SpawnSpot Ananas
   m_TagString: Untagged
   m_Icon: {fileID: 5132851093641282708, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
@@ -498,8 +498,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e133b034bf0782d40a68ed5c70ad14e9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  monster_typeName: Peanut
-  ability_mask: 1
+  monster_typeName: Ananas
+  ability_mask: 8
 --- !u!1 &1749260243
 GameObject:
   m_ObjectHideFlags: 0

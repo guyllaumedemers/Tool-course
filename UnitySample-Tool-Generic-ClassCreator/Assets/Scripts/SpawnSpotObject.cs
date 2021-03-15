@@ -39,33 +39,18 @@ public class SpawnSpotObject : MonoBehaviour
         Type monster_type = Type.GetType(type);
         Monster monster = go.AddComponent(monster_type) as Monster;
 
-        int log = (int)Mathf.Log(mask, bit_value);
-        int pow = (int)Mathf.Pow(bit_value, log);
-        if (mask > pow)
-            ProcessCombineLayers(mask, pow, monster.abilities);
-        else
-            ProcessSingleLayer(mask, pow, monster.abilities);
-        Debug.Log(monster.abilities.Count);
+        GetLayers(mask, monster.abilities);
         return monster;
     }
 
-    private void ProcessCombineLayers(int mask, int pow, List<Ability> abilities)
+    private void GetLayers(int mask, List<Ability> abilities)
     {
         try
         {
+            int log = (int)Mathf.Log(mask, bit_value);
+            int pow = (int)Mathf.Pow(bit_value, log);
 
-            int remains = mask - pow;
-            if (remains < 0)
-                return;
-
-            Type type = Type.GetType(LayerMask.LayerToName(remains + layer_offset));
-            if (type != null)
-                abilities?.Add(System.Activator.CreateInstance(type) as Ability);
-
-            int newLog = (int)Mathf.Log(remains, bit_value);
-            int newPow = (int)Mathf.Pow(bit_value, newLog);
-            if (mask > pow)
-                ProcessCombineLayers(remains, newPow, abilities);
+            RecursiveSearch(mask, log, pow, abilities);
         }
         catch (System.StackOverflowException e)
         {
@@ -73,10 +58,33 @@ public class SpawnSpotObject : MonoBehaviour
         }
     }
 
-    private void ProcessSingleLayer(int mask, int pow, List<Ability> abilities)
+    private void RecursiveSearch(int mask, int log, int pow, List<Ability> abilities)
     {
-        Type type = Type.GetType(LayerMask.LayerToName((mask - pow) + layer_offset));
-        if (type != null)
-            abilities?.Add(System.Activator.CreateInstance(type) as Ability);
+        int newMask = mask - (mask - pow);
+        int remains = mask - pow;
+        if (mask < 0)
+            return;
+        else if (mask == pow)
+            abilities?.Add(System.Activator.CreateInstance(GetLayerType(log)) as Ability);
+        else
+            Search(newMask, remains, abilities);
+    }
+
+    private Type GetLayerType(int log)
+    {
+        Type type = Type.GetType(LayerMask.LayerToName(log + layer_offset));
+        Debug.Log($"Type {type}");
+        return type;
+    }
+
+    private void Search(int newMask, int remains, List<Ability> abilities)
+    {
+        int log = (int)Mathf.Log(newMask, bit_value);
+        int pow = (int)Mathf.Pow(bit_value, log);
+
+        if (newMask == pow)
+            abilities?.Add(System.Activator.CreateInstance(GetLayerType(newMask)) as Ability);
+        if (remains > 0)
+            RecursiveSearch(remains, log, pow, abilities);
     }
 }

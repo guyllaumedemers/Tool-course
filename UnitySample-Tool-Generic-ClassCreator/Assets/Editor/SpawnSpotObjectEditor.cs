@@ -28,7 +28,7 @@ public class SpawnSpotObjectEditor : Editor
         //// Nothing == 0, Everything == -1
         mask = p_abilities_mask.intValue;
 
-        if (monsterType_index == -1 && mask == -2)
+        if (monsterType_index == -1 || mask == -2)
         {
             monsterType_index = 0;
             mask = 0;
