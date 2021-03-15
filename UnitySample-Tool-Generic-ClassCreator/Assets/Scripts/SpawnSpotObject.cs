@@ -53,6 +53,7 @@ public class SpawnSpotObject : MonoBehaviour
     {
         try
         {
+
             int remains = mask - pow;
             if (remains < 0)
                 return;
@@ -63,8 +64,8 @@ public class SpawnSpotObject : MonoBehaviour
 
             int newLog = (int)Mathf.Log(remains, bit_value);
             int newPow = (int)Mathf.Pow(bit_value, newLog);
-
-            ProcessCombineLayers(remains, newPow, abilities);
+            if (mask > pow)
+                ProcessCombineLayers(remains, newPow, abilities);
         }
         catch (System.StackOverflowException e)
         {
