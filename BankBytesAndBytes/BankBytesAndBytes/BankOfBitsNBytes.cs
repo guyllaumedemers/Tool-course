@@ -51,7 +51,7 @@ namespace BankBytesAndBytes
                 else
                 {
                     Console.WriteLine("Not enough money in the bank!");
-                    return 0;
+                    return -1;
                 }
             }
             return 0;
