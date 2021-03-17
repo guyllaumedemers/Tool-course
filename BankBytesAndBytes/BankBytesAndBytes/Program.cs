@@ -33,7 +33,7 @@ namespace BankBytesAndBytes
             {
                 myString += myArr[myIndexes[i]];
             }
-            Console.WriteLine(myString);
+            //Console.WriteLine(myString);
             return myString.ToCharArray();
         }
 
@@ -82,7 +82,7 @@ namespace BankBytesAndBytes
                 ///// so for each position, we have to look at ALL the right neighbors
                 for (int i = cpt; i < indexes.Length - 1; i++)
                 {
-                    if (indexes[i + 1] != maxIndex)
+                    if (indexes[i + 1] != minIndex)
                     {
                         isMaxedOut = false;
                         break;
@@ -92,7 +92,7 @@ namespace BankBytesAndBytes
                 if (isMaxedOut)
                     indexes[cpt] = UpdateIndexForward(indexes[cpt]);
                 cpt--;
-            } while (cpt != 0);
+            } while (cpt != -1);
         }
 
         public static void Backward(int[] indexes)
