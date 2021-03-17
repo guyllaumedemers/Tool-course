@@ -185,9 +185,17 @@ namespace BankBytesAndBytes
             List<int[]> list_Array = new List<int[]>();
             int[] f_indexes = new int[psw_lenght];
             int[] b_indexes = new int[psw_lenght];
+            int[] fm_indexes = new int[psw_lenght];
+            int[] bm_indexes = new int[psw_lenght];
+            int[] ffm_indexes = new int[psw_lenght];
+            int[] bbm_indexes = new int[psw_lenght];
 
             f_indexes = InitializeIntArray(f_indexes, minIndex);
             b_indexes = InitializeIntArray(b_indexes, maxIndex);
+            fm_indexes = InitializeIntArray(fm_indexes, maxIndex / 2);
+            bm_indexes = InitializeIntArray(bm_indexes, maxIndex / 2);
+            ffm_indexes = InitializeIntArray(fm_indexes, maxIndex / 5);
+            bbm_indexes = InitializeIntArray(bm_indexes, maxIndex / 5);
             //char[] myArr = TestPassword(char_array, b_indexes, 3);
             //foreach (char c in myArr)
             //{
@@ -195,7 +203,10 @@ namespace BankBytesAndBytes
             //}
             list_Array.Add(f_indexes);
             list_Array.Add(b_indexes);
-
+            list_Array.Add(fm_indexes);
+            list_Array.Add(bm_indexes);
+            list_Array.Add(ffm_indexes);
+            list_Array.Add(bbm_indexes);
             Stopwatch stopwatch = new Stopwatch();
 
             //InitializeThreads(stopwatch, bbb, f_indexes, b_indexes);
