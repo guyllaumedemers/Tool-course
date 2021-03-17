@@ -17,6 +17,37 @@ namespace Tool_LinkedList
             count = 0;
         }
 
+        public void AddBefore(LinkedListNode<T> nodeToAdd, LinkedListNode<T> positionAt)
+        {
+            ////// if the 'positionAt' at which we want to add a node BEFORE is null, it means that their is no BEFORE
+            ////// what we could do is allow the user to still add the node but at the 'positionAt' placement
+            if (positionAt == null)
+                head = tail = nodeToAdd;
+            else
+            {
+                ///// else if the spot placement is valid, it means that their is a previous node OR the previous node could be null
+                ///// in the case where the positionAt is the head
+                ///// if the positionAt is head, we take the new node and update the head
+                if (positionAt == head)
+                {
+                    head.Previous = nodeToAdd;
+                    nodeToAdd.Next = head;
+                    head = nodeToAdd;
+                }
+                else
+                {
+                    ////// else if they are not equal, it means that we have to update the positionAt previous node to be the one we add
+                    ////// but also the positionAt previous node needs to update its next node to be the nodeToAdd
+                    ////// DONT FORGET to set the nodeToAdd previous and next
+                    nodeToAdd.Previous = positionAt.Previous;
+                    nodeToAdd.Next = positionAt;
+                    positionAt.Previous.Next = nodeToAdd;
+                    positionAt.Previous = nodeToAdd;
+                }
+            }
+            count++;
+        }
+
         #region
         public void AddLast(LinkedListNode<T> node)
         {
@@ -27,6 +58,9 @@ namespace Tool_LinkedList
                 tail = node;
             else
             {
+                ///// what happens in the case where head == tail and we call the addBefore?
+
+
                 ///// we update the new node previous to be the next of the current tail
                 ///// PROEBLEM, the tail node doesnt have a next since it is last in line
                 ///// How do we retrieve the next value?
@@ -40,6 +74,7 @@ namespace Tool_LinkedList
             ////// if the head is null, it means the tail is our first node and also means it's equal to the head
             if (head == null)
                 head = tail;
+            count++;
         }
         public void AddFirst(LinkedListNode<T> node)
         {
@@ -59,6 +94,14 @@ namespace Tool_LinkedList
             ////// if the tail was never set, then the tail is set to the head
             if (tail == null)
                 tail = head;
+            count++;
+        }
+
+        public void Clear()
+        {
+            head = null;
+            tail = null;
+            count = 0;
         }
         #endregion
 
@@ -91,27 +134,20 @@ namespace Tool_LinkedList
     {
         static void Main(string[] args)
         {
-            ////// Create the Initial Emtpy LinkedList<T>
             LinkedList<int> linkedList = new LinkedList<int>();
-            ////// Create a single ListNode<T>
-            LinkedListNode<int> ll_node1 = new LinkedListNode<int>(5);
-            ////// Add the node to the LinkedList<T>, which initialize the head and the tail since it was empty
-            linkedList.AddLast(ll_node1);
-            ////// Debug.Log to verify if the head and tail are the same when adding the first node
-            Console.WriteLine("Head : {0}, Tail : {1}", linkedList.Head.Value, linkedList.Tail.Value);
-            ////// we have to Test that adding another node update the tail value
-            ////// TESTED!! WORKED!!
-            LinkedListNode<int> ll_node2 = new LinkedListNode<int>(7);
-            linkedList.AddLast(ll_node2);
-            Console.WriteLine("Head : {0}, Tail : {1}", linkedList.Head.Value, linkedList.Tail.Value);
-            ////// Lets Test is the previous node of the current tail has the proper value
-            LinkedListNode<int> ll_node3 = new LinkedListNode<int>(21);
-            linkedList.AddLast(ll_node3);
-            Console.WriteLine("Head : {0}, Tail.Previous {1}, Tail : {2}", linkedList.Head.Value, linkedList.Tail.Previous.Value, linkedList.Tail.Value);
-            ////// lets try adding with the AddFirst Method in front of the current Head that holds the value 5
-            LinkedListNode<int> ll_node4 = new LinkedListNode<int>(11);
-            linkedList.AddFirst(ll_node4);
-            Console.WriteLine("Head : {0}, Head.Next : {1}, Tail : {2}", linkedList.Head.Value, linkedList.Head.Next.Value, linkedList.Tail.Value);
+
+            LinkedListNode<int> node1 = new LinkedListNode<int>(5);
+            LinkedListNode<int> node2 = new LinkedListNode<int>(7);
+            LinkedListNode<int> node3 = new LinkedListNode<int>(8);
+
+            linkedList.AddBefore(node1, linkedList.Head);
+            Console.WriteLine("Head {0}, Before Node {1}", linkedList.Head?.Value, node1.Value);
+
+            linkedList.AddBefore(node2, linkedList.Tail);
+            Console.WriteLine("Head {0},Before Node {1}, Tail Node {2}", linkedList.Head?.Value, node2.Value, linkedList.Tail?.Value);
+
+            linkedList.AddBefore(node3, linkedList.Tail);
+            Console.WriteLine("Head {0},Before Node {1}, Tail Node {2}", linkedList.Head?.Value, node3.Value, linkedList.Tail?.Value);
         }
     }
 }
