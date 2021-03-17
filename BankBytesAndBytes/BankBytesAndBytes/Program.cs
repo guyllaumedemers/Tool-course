@@ -97,11 +97,25 @@ namespace BankBytesAndBytes
 
         public static void Backward(int[] indexes)
         {
-            if (indexes[2] == minIndex && indexes[1] == minIndex)
-                indexes[0] = UpdateIndexBackward(indexes[0]);
-            if (indexes[2] == minIndex)
-                indexes[1] = UpdateIndexBackward(indexes[1]);
-            indexes[2] = UpdateIndexBackward(indexes[2]);
+            indexes[indexes.Length - 1] = UpdateIndexBackward(indexes[indexes.Length - 1]);
+            int cpt = indexes.Length - 2;
+            do
+            {
+                bool isMaxedOut = false;
+                ///// so for each position, we have to look at ALL the right neighbors
+                for (int i = cpt; i < indexes.Length - 1; i++)
+                {
+                    if (indexes[i + 1] != maxIndex)
+                    {
+                        isMaxedOut = false;
+                        break;
+                    }
+                    isMaxedOut = true;
+                }
+                if (isMaxedOut)
+                    indexes[cpt] = UpdateIndexBackward(indexes[cpt]);
+                cpt--;
+            } while (cpt != -1);
         }
         #endregion
 
@@ -125,7 +139,8 @@ namespace BankBytesAndBytes
         public static void InitializeThreads(Stopwatch stopwatch, BankOfBitsNBytes bbb, List<int[]> all_indexes)
         {
             stopwatch.Start();
-            bool dir = false;
+            bool dir = false; //// this boolean determine the order in which you can add arrays to the list
+            ////// the first array must be a array that goes forward, the second will go backward and so on
             for (int i = 0; i < all_indexes.Count; i++)
             {
                 dir = !dir;
@@ -160,7 +175,6 @@ namespace BankBytesAndBytes
                     Backward(indexes);
             }
             stopwatch.Stop();
-            Console.WriteLine("Money Stolen : " + amountStolen);
             Console.WriteLine("Time : " + stopwatch.ElapsedMilliseconds + "ms");
         }
         #endregion
@@ -180,14 +194,12 @@ namespace BankBytesAndBytes
             //    Console.WriteLine(c);
             //}
             list_Array.Add(f_indexes);
-            //list_Array.Add(b_indexes);
-            Console.WriteLine(list_Array.Count);
+            list_Array.Add(b_indexes);
 
             Stopwatch stopwatch = new Stopwatch();
 
             //InitializeThreads(stopwatch, bbb, f_indexes, b_indexes);
             InitializeThreads(stopwatch, bbb, list_Array);
-
             Console.ReadLine();
         }
     }
