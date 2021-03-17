@@ -28,7 +28,16 @@ namespace Tool_LinkedList
                 ///// else if the spot placement is valid, it means that their is a previous node OR the previous node could be null
                 ///// in the case where the positionAt is the head
                 ///// if the positionAt is head, we take the new node and update the head
-                if (positionAt == head)
+                if (positionAt == head && positionAt == tail)
+                {
+                    ///// if my positionAt equals head AND tail, we have to set the previous node of tail to be the new node
+                    ///// we also have to set the new node next to be the tail
+                    ///// we have to set the head to be the new node
+                    tail.Previous = nodeToAdd;
+                    nodeToAdd.Next = tail;
+                    head = nodeToAdd;
+                }
+                else if (positionAt == head)
                 {
                     head.Previous = nodeToAdd;
                     nodeToAdd.Next = head;
@@ -58,9 +67,6 @@ namespace Tool_LinkedList
                 tail = node;
             else
             {
-                ///// what happens in the case where head == tail and we call the addBefore?
-
-
                 ///// we update the new node previous to be the next of the current tail
                 ///// PROEBLEM, the tail node doesnt have a next since it is last in line
                 ///// How do we retrieve the next value?
@@ -141,13 +147,11 @@ namespace Tool_LinkedList
             LinkedListNode<int> node3 = new LinkedListNode<int>(8);
 
             linkedList.AddBefore(node1, linkedList.Head);
-            Console.WriteLine("Head {0}, Before Node {1}", linkedList.Head?.Value, node1.Value);
-
+            Console.WriteLine("Head {0}, Tail {1}", linkedList.Head?.Value, linkedList.Tail?.Value);
             linkedList.AddBefore(node2, linkedList.Tail);
-            Console.WriteLine("Head {0},Before Node {1}, Tail Node {2}", linkedList.Head?.Value, node2.Value, linkedList.Tail?.Value);
-
-            linkedList.AddBefore(node3, linkedList.Tail);
-            Console.WriteLine("Head {0},Before Node {1}, Tail Node {2}", linkedList.Head?.Value, node3.Value, linkedList.Tail?.Value);
+            Console.WriteLine("Head {0}, Tail {1}", linkedList.Head?.Value, linkedList.Tail?.Value);
+            linkedList.AddBefore(node3, linkedList.Head);
+            Console.WriteLine("Head {0}, Tail {1}", linkedList.Head?.Value, linkedList.Tail?.Value);
         }
     }
 }
