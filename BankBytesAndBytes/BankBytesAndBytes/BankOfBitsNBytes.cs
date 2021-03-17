@@ -14,7 +14,7 @@ namespace BankBytesAndBytes
 
         int moneyAmt = 5000;
         public char[] password;
-        public int passwordLength = 3;
+        public static int passwordLength = 4;
 
 
         public BankOfBitsNBytes()
