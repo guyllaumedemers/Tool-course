@@ -57,45 +57,77 @@ namespace Tool_LinkedList
             count++;
         }
 
+        public void AddAfter(LinkedListNode<T> nodeToAdd, LinkedListNode<T> positionAt)
+        {
+            if (positionAt == null)
+                head = tail = nodeToAdd;
+            else
+            {
+                if (positionAt == head && positionAt == tail)
+                {
+                    head.Next = nodeToAdd;
+                    nodeToAdd.Previous = head;
+                    tail = nodeToAdd;
+                }
+                else if (positionAt == tail)
+                {
+                    ///// if the positionAt is the tail, we set the next of the tail to be the nodeToAdd and set the nodeToAdd previous to be
+                    ///// be the tail, then we set the new tail to be the nodeToAdd
+                    tail.Next = nodeToAdd;
+                    nodeToAdd.Previous = tail;
+                    tail = nodeToAdd;
+                }
+                ///// if the positionAt is not null, it means that the next node exist IF the positionAt is NOT the tail node
+                else
+                {
+                    nodeToAdd.Previous = positionAt;
+                    nodeToAdd.Next = positionAt.Next;
+                    positionAt.Next.Previous = nodeToAdd;
+                    positionAt.Next = nodeToAdd;
+                }
+            }
+            count++;
+        }
+
         #region
-        public void AddLast(LinkedListNode<T> node)
+        public void AddLast(LinkedListNode<T> nodeToAdd)
         {
             ////// if the tail is null, it means the list was never initialized, so we update the tail value(node) to the new node
             ////// else if the tail already has a value(node), we need to create a new node, set its value to the node we passed as params
             ////// we have to update the tail node to the newly instanciated node
             if (tail == null)
-                tail = node;
+                tail = nodeToAdd;
             else
             {
                 ///// we update the new node previous to be the next of the current tail
                 ///// PROEBLEM, the tail node doesnt have a next since it is last in line
                 ///// How do we retrieve the next value?
                 ///// We go up the ladder one step, the node before the tail has a reference to the tail (next == tail)
-                node.Previous = tail;
+                nodeToAdd.Previous = tail;
                 ///// we also need to set the tail.Next to be the new node
-                tail.Next = node;
+                tail.Next = nodeToAdd;
                 ///// we keep the next value of the node null since nothing comes after
-                tail = node;
+                tail = nodeToAdd;
             }
             ////// if the head is null, it means the tail is our first node and also means it's equal to the head
             if (head == null)
                 head = tail;
             count++;
         }
-        public void AddFirst(LinkedListNode<T> node)
+        public void AddFirst(LinkedListNode<T> nodeToAdd)
         {
             ////// if the head is null, then the head equals the node pass has params
             ////// else it means that we already have a head which could either be a single node (head/tail) or multiple nodes
             if (head == null)
-                head = node;
+                head = nodeToAdd;
             else
             {
                 ///// in the case where we have a single node (head/tail)
                 ///// what do we do?
                 ///// head node doesnt have a previous or next since head and tail reference the same node in this situation
-                head.Previous = node;
-                node.Next = head;
-                head = node;
+                head.Previous = nodeToAdd;
+                nodeToAdd.Next = head;
+                head = nodeToAdd;
             }
             ////// if the tail was never set, then the tail is set to the head
             if (tail == null)
@@ -146,12 +178,12 @@ namespace Tool_LinkedList
             LinkedListNode<int> node2 = new LinkedListNode<int>(7);
             LinkedListNode<int> node3 = new LinkedListNode<int>(8);
 
-            linkedList.AddBefore(node1, linkedList.Head);
-            Console.WriteLine("Head {0}, Tail {1}", linkedList.Head?.Value, linkedList.Tail?.Value);
-            linkedList.AddBefore(node2, linkedList.Tail);
-            Console.WriteLine("Head {0}, Tail {1}", linkedList.Head?.Value, linkedList.Tail?.Value);
-            linkedList.AddBefore(node3, linkedList.Head);
-            Console.WriteLine("Head {0}, Tail {1}", linkedList.Head?.Value, linkedList.Tail?.Value);
+            //linkedList.AddAfter(node1, linkedList.Head);
+            //Console.WriteLine("Head {0}, Tail {1}", linkedList.Head?.Value, linkedList.Tail?.Value);
+            //linkedList.AddAfter(node2, linkedList.Head);
+            //Console.WriteLine("Head {0}, Tail {1}", linkedList.Head?.Value, linkedList.Tail?.Value);
+            //linkedList.AddAfter(node3, linkedList.Tail);
+            //Console.WriteLine("Head {0}, Tail {1}", linkedList.Head?.Value, linkedList.Tail?.Value);
         }
     }
 }
