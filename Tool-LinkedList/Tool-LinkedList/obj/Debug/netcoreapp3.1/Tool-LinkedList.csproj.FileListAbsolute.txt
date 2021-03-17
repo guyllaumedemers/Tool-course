@@ -1,0 +1,13 @@
+C:\Users\gdemers\Documents\GitHub\Tool-course\Tool-LinkedList\Tool-LinkedList\bin\Debug\netcoreapp3.1\Tool-LinkedList.exe
+C:\Users\gdemers\Documents\GitHub\Tool-course\Tool-LinkedList\Tool-LinkedList\bin\Debug\netcoreapp3.1\Tool-LinkedList.deps.json
+C:\Users\gdemers\Documents\GitHub\Tool-course\Tool-LinkedList\Tool-LinkedList\bin\Debug\netcoreapp3.1\Tool-LinkedList.runtimeconfig.json
+C:\Users\gdemers\Documents\GitHub\Tool-course\Tool-LinkedList\Tool-LinkedList\bin\Debug\netcoreapp3.1\Tool-LinkedList.runtimeconfig.dev.json
+C:\Users\gdemers\Documents\GitHub\Tool-course\Tool-LinkedList\Tool-LinkedList\bin\Debug\netcoreapp3.1\Tool-LinkedList.dll
+C:\Users\gdemers\Documents\GitHub\Tool-course\Tool-LinkedList\Tool-LinkedList\bin\Debug\netcoreapp3.1\Tool-LinkedList.pdb
+C:\Users\gdemers\Documents\GitHub\Tool-course\Tool-LinkedList\Tool-LinkedList\obj\Debug\netcoreapp3.1\Tool-LinkedList.csprojAssemblyReference.cache
+C:\Users\gdemers\Documents\GitHub\Tool-course\Tool-LinkedList\Tool-LinkedList\obj\Debug\netcoreapp3.1\Tool-LinkedList.AssemblyInfoInputs.cache
+C:\Users\gdemers\Documents\GitHub\Tool-course\Tool-LinkedList\Tool-LinkedList\obj\Debug\netcoreapp3.1\Tool-LinkedList.AssemblyInfo.cs
+C:\Users\gdemers\Documents\GitHub\Tool-course\Tool-LinkedList\Tool-LinkedList\obj\Debug\netcoreapp3.1\Tool-LinkedList.csproj.CoreCompileInputs.cache
+C:\Users\gdemers\Documents\GitHub\Tool-course\Tool-LinkedList\Tool-LinkedList\obj\Debug\netcoreapp3.1\Tool-LinkedList.dll
+C:\Users\gdemers\Documents\GitHub\Tool-course\Tool-LinkedList\Tool-LinkedList\obj\Debug\netcoreapp3.1\Tool-LinkedList.pdb
+C:\Users\gdemers\Documents\GitHub\Tool-course\Tool-LinkedList\Tool-LinkedList\obj\Debug\netcoreapp3.1\Tool-LinkedList.genruntimeconfig.cache

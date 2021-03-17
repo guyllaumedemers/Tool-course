@@ -62,12 +62,14 @@ public class SpawnSpotObject : MonoBehaviour
     {
         int newMask = mask - (mask - pow);
         int remains = mask - pow;
+
         if (mask < 0)
             return;
         else if (mask == pow)
             abilities?.Add(System.Activator.CreateInstance(GetLayerType(log)) as Ability);
         else
-            Search(newMask, remains, abilities);
+            Search(newMask, remains, abilities); /// the search function is necessary has it will calculate the remains when looking at complex values like example : 11, which breaks
+        /// in 8 + 3
     }
 
     private Type GetLayerType(int log)
