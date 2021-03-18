@@ -192,10 +192,10 @@ namespace BankBytesAndBytes
 
             f_indexes = InitializeIntArray(f_indexes, minIndex);
             b_indexes = InitializeIntArray(b_indexes, maxIndex);
-            fm_indexes = InitializeIntArray(fm_indexes, maxIndex / 2);
-            bm_indexes = InitializeIntArray(bm_indexes, maxIndex / 2);
-            ffm_indexes = InitializeIntArray(fm_indexes, maxIndex / 5);
-            bbm_indexes = InitializeIntArray(bm_indexes, maxIndex / 5);
+            fm_indexes = InitializeIntArray(fm_indexes, minIndex + maxIndex / 2);
+            bm_indexes = InitializeIntArray(bm_indexes, maxIndex - maxIndex / 2);
+            ffm_indexes = InitializeIntArray(fm_indexes, minIndex + maxIndex / 5);
+            bbm_indexes = InitializeIntArray(bm_indexes, maxIndex - maxIndex / 5);
             //char[] myArr = TestPassword(char_array, b_indexes, 3);
             //foreach (char c in myArr)
             //{
