@@ -138,7 +138,6 @@ namespace BankBytesAndBytes
 
         public static void InitializeThreads(Stopwatch stopwatch, BankOfBitsNBytes bbb, List<int[]> all_indexes)
         {
-            stopwatch.Start();
             bool dir = false; //// this boolean determine the order in which you can add arrays to the list
             ////// the first array must be a array that goes forward, the second will go backward and so on
             for (int i = 0; i < all_indexes.Count; i++)
@@ -181,6 +180,8 @@ namespace BankBytesAndBytes
 
         static void Main(string[] args)
         {
+            Stopwatch stopwatch = new Stopwatch();
+            stopwatch.Start();
             BankOfBitsNBytes bbb = new BankOfBitsNBytes();
             List<int[]> list_Array = new List<int[]>();
             int[] f_indexes = new int[psw_lenght];
@@ -207,7 +208,6 @@ namespace BankBytesAndBytes
             list_Array.Add(bm_indexes);
             list_Array.Add(ffm_indexes);
             list_Array.Add(bbm_indexes);
-            Stopwatch stopwatch = new Stopwatch();
 
             //InitializeThreads(stopwatch, bbb, f_indexes, b_indexes);
             InitializeThreads(stopwatch, bbb, list_Array);
