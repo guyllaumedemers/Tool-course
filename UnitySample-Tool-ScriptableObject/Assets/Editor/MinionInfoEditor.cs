@@ -8,6 +8,7 @@ public class MinionInfoEditor : Editor
 {
     SerializedObject s_object;
     SerializedProperty p_image;
+    SerializedProperty p_flag;
     SerializedProperty p_name;
     SerializedProperty p_description;
     SerializedProperty p_health;
@@ -22,6 +23,7 @@ public class MinionInfoEditor : Editor
     readonly string HEALTH = "health";
     readonly string MANA = "defense";
     readonly string COST = "cost";
+    readonly string FLAG = "flag";
 
     float space = 20.0f;
 
@@ -35,12 +37,18 @@ public class MinionInfoEditor : Editor
 
     public override void OnInspectorGUI()
     {
-        //DrawDefaultInspector();
         s_object.Update();
 
         EditorGUIUtility.labelWidth = 100;
 
         EditorGUILayout.BeginVertical();
+        p_flag.boolValue = GUILayout.Toggle(p_flag.boolValue, new GUIContent("Flag"));
+        if (p_flag.boolValue)
+        {
+            ///// Select Texture
+            EditorGUILayout.ObjectField(p_image, new GUIContent("Image"));
+        }
+        texture = AssetPreview.GetAssetPreview(p_image.objectReferenceValue);
         ////// Class Image
         GUILayout.Label(texture, bold_style, GUILayout.ExpandWidth(true), GUILayout.ExpandHeight(true));
         ////// Class Name
@@ -77,6 +85,7 @@ public class MinionInfoEditor : Editor
         p_health = s_object.FindProperty(HEALTH);
         p_mana = s_object.FindProperty(MANA);
         p_cost = s_object.FindProperty(COST);
+        p_flag = s_object.FindProperty(FLAG);
     }
 
     private void InitializeStyle()

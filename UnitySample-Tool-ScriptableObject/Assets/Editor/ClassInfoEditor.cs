@@ -9,6 +9,7 @@ public class ClassInfoEditor : Editor
     SerializedObject s_object;
     SerializedProperty p_image;
     SerializedProperty p_name;
+    SerializedProperty p_flag;
     SerializedProperty p_basic_card;
     SerializedProperty p_golden_card;
     Texture texture;
@@ -16,60 +17,87 @@ public class ClassInfoEditor : Editor
 
     readonly string SPRITE_IMAGE = "image";
     readonly string NAME = "name";
+    readonly string FLAG = "flag";
     readonly string BASIC_CARDS = "basic_cards";
     readonly string GOLDEN_CARDS = "golden_class_specific_cards";
 
     float space = 20.0f;
     float index_offset = 1;
 
+    int last_basicArr;
+    int last_goldenArr;
+
     private void OnEnable()
     {
         s_object = new SerializedObject(target);
-        p_image = s_object.FindProperty(SPRITE_IMAGE);
-        p_name = s_object.FindProperty(NAME);
-        p_basic_card = s_object.FindProperty(BASIC_CARDS);
-        p_golden_card = s_object.FindProperty(GOLDEN_CARDS);
+        InitializeProperties();
         InitializeStyle();
-        texture = AssetPreview.GetAssetPreview(p_image.objectReferenceValue);
+        last_basicArr = p_basic_card.arraySize;
     }
 
     public override void OnInspectorGUI()
     {
-        //DrawDefaultInspector();
         s_object.Update();
 
         EditorGUIUtility.labelWidth = 100;
-
         EditorGUILayout.BeginVertical();
-        ////// Class Image
-        GUILayout.Label(texture, bold_style, GUILayout.ExpandWidth(true), GUILayout.ExpandHeight(true));
-        ////// Class Name
-        GUILayout.Space(space);
-        p_name.stringValue = EditorGUILayout.TextField(p_name.stringValue, bold_style);
-        ((ClassInfo)target).name = p_name.stringValue;
-        GUILayout.Space(space);
-        ////// Basic Cards
-        for (int i = 0; i < p_basic_card.arraySize; i++)
+
+        p_flag.boolValue = GUILayout.Toggle(p_flag.boolValue, new GUIContent("Flag"));
+        if (p_flag.boolValue)
         {
-            string temp = p_basic_card.GetArrayElementAtIndex(i).stringValue;
-            temp = EditorGUILayout.TextField(new GUIContent($"Basic Card : {i + index_offset}"), temp);
-            p_basic_card.GetArrayElementAtIndex(i).stringValue = temp;
+            ///// Select Texture
+            EditorGUILayout.ObjectField(p_image, new GUIContent("Image"));
         }
+        texture = AssetPreview.GetAssetPreview(p_image.objectReferenceValue);
         GUILayout.Space(space);
-        ////// Golden Cards
-        for (int i = 0; i < p_golden_card.arraySize; i++)
-        {
-            string temp = p_golden_card.GetArrayElementAtIndex(i).stringValue;
-            temp = EditorGUILayout.TextField(new GUIContent($"Golden Card : {i + index_offset}"), temp, GUILayout.ExpandWidth(true), GUILayout.ExpandHeight(true));
-            p_golden_card.GetArrayElementAtIndex(i).stringValue = temp;
-        }
+
+        ///// Display Texture
+        GUILayout.Label(texture, bold_style);
+        ///// Display Class Name
+        EditorGUILayout.LabelField(p_name.stringValue, bold_style);
+
         GUILayout.Space(space);
+
+        ///// Display Properties
+        DisplayArr(p_basic_card, ref last_basicArr, "Basic Cards");
+        GUILayout.Space(space);
+
+        DisplayArr(p_golden_card, ref last_goldenArr, "Golden Cards");
+        GUILayout.Space(space);
+
         ////// Apply Button
         if (GUILayout.Button(new GUIContent("Apply")))
             Save();
         EditorGUILayout.EndVertical();
 
         s_object.ApplyModifiedProperties();
+    }
+
+    private void DisplayArr(SerializedProperty myArr, ref int lastArrSizeValue, string label)
+    {
+        lastArrSizeValue = EditorGUILayout.IntField(new GUIContent(label), myArr.arraySize);
+        if (lastArrSizeValue != myArr.arraySize)
+        {
+            if (EditorUtility.DisplayDialog("Confirm", "Do you want to apply your modifications?", "Apply", "Cancel"))
+                myArr.arraySize = lastArrSizeValue;
+        }
+        if (myArr.arraySize != 0)
+        {
+            for (int i = 0; i < myArr.arraySize; i++)
+            {
+                string temp = myArr.GetArrayElementAtIndex(i).stringValue;
+                EditorGUILayout.TextField(new GUIContent($"Selection {i + index_offset} : "), temp);
+            }
+        }
+    }
+
+    private void InitializeProperties()
+    {
+        p_image = s_object.FindProperty(SPRITE_IMAGE);
+        p_name = s_object.FindProperty(NAME);
+        p_flag = s_object.FindProperty(FLAG);
+        p_basic_card = s_object.FindProperty(BASIC_CARDS);
+        p_golden_card = s_object.FindProperty(GOLDEN_CARDS);
     }
 
     private void InitializeStyle()

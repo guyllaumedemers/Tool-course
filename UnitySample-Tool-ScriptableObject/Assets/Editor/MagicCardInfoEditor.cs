@@ -11,6 +11,7 @@ public class MagicCardInfoEditor : Editor
     SerializedProperty p_name;
     SerializedProperty p_description;
     SerializedProperty p_cost;
+    SerializedProperty p_flag;
     Texture texture;
     GUIStyle bold_style = new GUIStyle();
 
@@ -18,6 +19,7 @@ public class MagicCardInfoEditor : Editor
     readonly string NAME = "name";
     readonly string DESCRIPTION = "description";
     readonly string COST = "cost";
+    readonly string FLAG = "flag";
 
     float space = 20.0f;
 
@@ -26,7 +28,6 @@ public class MagicCardInfoEditor : Editor
         s_object = new SerializedObject(target);
         InitializeProperties();
         InitializeStyle();
-        texture = AssetPreview.GetAssetPreview(p_image.objectReferenceValue);
     }
 
     public override void OnInspectorGUI()
@@ -37,6 +38,13 @@ public class MagicCardInfoEditor : Editor
         EditorGUIUtility.labelWidth = 100;
 
         EditorGUILayout.BeginVertical();
+        p_flag.boolValue = GUILayout.Toggle(p_flag.boolValue, new GUIContent("Flag"));
+        if (p_flag.boolValue)
+        {
+            ///// Select Texture
+            EditorGUILayout.ObjectField(p_image, new GUIContent("Image"));
+        }
+        texture = AssetPreview.GetAssetPreview(p_image.objectReferenceValue);
         ////// Class Image
         GUILayout.Label(texture, bold_style, GUILayout.ExpandWidth(true), GUILayout.ExpandHeight(true));
         ////// Class Name
@@ -67,6 +75,7 @@ public class MagicCardInfoEditor : Editor
         p_name = s_object.FindProperty(NAME);
         p_description = s_object.FindProperty(DESCRIPTION);
         p_cost = s_object.FindProperty(COST);
+        p_flag = s_object.FindProperty(FLAG);
     }
 
     private void InitializeStyle()

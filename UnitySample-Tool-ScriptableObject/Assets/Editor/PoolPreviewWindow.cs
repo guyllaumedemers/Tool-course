@@ -48,7 +48,7 @@ public class PoolPreviewWindow : EditorWindow
             if (GUILayout.Button(texture, GUILayout.MaxWidth(75), GUILayout.MaxHeight(75)))
             {
                 ///// if button is clicked, display the content of the button selection
-                selection_path = $"ScriptableObjects/{folder_name.ToString()}/";
+                selection_path = $"ScriptableObjects/{folder_name}/";
                 isActive = true;
             }
             GUILayout.Label(folder_name);
@@ -69,14 +69,16 @@ public class PoolPreviewWindow : EditorWindow
             }
 
             EditorGUILayout.EndHorizontal();
+            System.Type myType = System.Type.GetType("");
+
             if (GUILayout.Button(new GUIContent("+")))
-                CreateNewAsset(selection_path);
+                CreateNewAsset(myType, null);
             EditorGUILayout.EndScrollView();
         }
         EditorGUILayout.EndVertical();
     }
 
-    private void Display(Object myObject) ///// myObject when clicking on Classes, is of type ClassInfo
+    private void Display(Object myObject)
     {
         EditorGUILayout.BeginVertical();
 
@@ -86,8 +88,8 @@ public class PoolPreviewWindow : EditorWindow
         EditorGUILayout.EndVertical();
     }
 
-    private void CreateNewAsset(string selectionPath)
+    private void CreateNewAsset(System.Type type, string selectionPath)
     {
-        Debug.Log($"Add New : {selection_path}");
+
     }
 }
