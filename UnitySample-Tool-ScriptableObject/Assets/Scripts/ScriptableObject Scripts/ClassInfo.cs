@@ -9,5 +9,4 @@ public class ClassInfo : ScriptableObject
     public new string name;
     public string[] basic_cards;
     public string[] golden_class_specific_cards;
-    //public string[] golden_minion_cards;
 }

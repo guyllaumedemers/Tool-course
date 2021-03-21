@@ -62,9 +62,6 @@ public class PoolPreviewWindow : EditorWindow
             {
                 if (myObject != null)
                     Display(myObject);
-
-                if (GUILayout.Button(new GUIContent("Apply")))
-                    Save();
             }
             EditorGUILayout.EndHorizontal();
         }
@@ -77,18 +74,7 @@ public class PoolPreviewWindow : EditorWindow
 
         Editor myEditor = Editor.CreateEditor(myObject);
         myEditor.OnInspectorGUI();
-        ///// Retrieve the object inside the folder
-        ///// Access the Sprite attach to the ScriptableObject
-        ///// Display the information contains inside the ScriptableObject
-        Texture icon = AssetPreview.GetAssetPreview(myObject);
-        if (icon != null)
-            GUI.DrawTexture(new Rect(), icon);
 
         EditorGUILayout.EndVertical();
-    }
-
-    private void Save()
-    {
-        Debug.Log("ScriptableObject saved");
     }
 }
