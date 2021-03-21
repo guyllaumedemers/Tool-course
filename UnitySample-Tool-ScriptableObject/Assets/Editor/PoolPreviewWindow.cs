@@ -67,7 +67,10 @@ public class PoolPreviewWindow : EditorWindow
                 if (myObject != null)
                     Display(myObject);
             }
+
             EditorGUILayout.EndHorizontal();
+            if (GUILayout.Button(new GUIContent("+")))
+                CreateNewAsset(selection_path);
             EditorGUILayout.EndScrollView();
         }
         EditorGUILayout.EndVertical();
@@ -81,5 +84,10 @@ public class PoolPreviewWindow : EditorWindow
         myEditor.OnInspectorGUI();
 
         EditorGUILayout.EndVertical();
+    }
+
+    private void CreateNewAsset(string selectionPath)
+    {
+        Debug.Log($"Add New : {selection_path}");
     }
 }
