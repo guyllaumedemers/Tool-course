@@ -12,9 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a8d3eec44572acb4c8baad0e37b2b730, type: 3}
   m_Name: Tirion
   m_EditorClassIdentifier: 
-  image: {fileID: 0}
-  name: 
-  description: 
-  health: 0
-  defense: 0
-  cost: 0
+  image: {fileID: 21300000, guid: 14200a8cc7a0d014e82aadbdd75fc9ee, type: 3}
+  name: Tirion Fordring
+  description: Divine Shield. Taunt. Deathrattle. Equip a 5/3 Ashbringer.
+  health: 6
+  defense: 6
+  cost: 8

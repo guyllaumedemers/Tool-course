@@ -13,6 +13,7 @@ public class PoolPreviewWindow : EditorWindow
     Texture texture;
     bool isActive = false;
     string selection_path = null;
+    Vector2 scrollview;
 
     [MenuItem("Custom Windows/ScriptablePool")]
     public static void OpenWindow()
@@ -22,6 +23,7 @@ public class PoolPreviewWindow : EditorWindow
 
     private void OnEnable()
     {
+        scrollview = new Vector2();
         isActive = false;
     }
 
@@ -56,6 +58,8 @@ public class PoolPreviewWindow : EditorWindow
 
         if (isActive)
         {
+            scrollview = EditorGUILayout.BeginScrollView(scrollview);
+
             Object[] folder_content = Resources.LoadAll(selection_path);
             EditorGUILayout.BeginHorizontal();
             foreach (Object myObject in folder_content)
@@ -64,6 +68,7 @@ public class PoolPreviewWindow : EditorWindow
                     Display(myObject);
             }
             EditorGUILayout.EndHorizontal();
+            EditorGUILayout.EndScrollView();
         }
         EditorGUILayout.EndVertical();
     }

@@ -3,32 +3,32 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
-[CustomEditor(typeof(ClassInfo))]
-public class ClassInfoEditor : Editor
+[CustomEditor(typeof(MinionInfo))]
+public class MinionInfoEditor : Editor
 {
     SerializedObject s_object;
     SerializedProperty p_image;
     SerializedProperty p_name;
-    SerializedProperty p_basic_card;
-    SerializedProperty p_golden_card;
+    SerializedProperty p_description;
+    SerializedProperty p_health;
+    SerializedProperty p_mana;
+    SerializedProperty p_cost;
     Texture texture;
     GUIStyle bold_style = new GUIStyle();
 
     readonly string SPRITE_IMAGE = "image";
     readonly string NAME = "name";
-    readonly string BASIC_CARDS = "basic_cards";
-    readonly string GOLDEN_CARDS = "golden_class_specific_cards";
+    readonly string DESCRIPTION = "description";
+    readonly string HEALTH = "health";
+    readonly string MANA = "defense";
+    readonly string COST = "cost";
 
     float space = 20.0f;
-    float index_offset = 1;
 
     private void OnEnable()
     {
         s_object = new SerializedObject(target);
-        p_image = s_object.FindProperty(SPRITE_IMAGE);
-        p_name = s_object.FindProperty(NAME);
-        p_basic_card = s_object.FindProperty(BASIC_CARDS);
-        p_golden_card = s_object.FindProperty(GOLDEN_CARDS);
+        InitializeProperties();
         InitializeStyle();
         texture = AssetPreview.GetAssetPreview(p_image.objectReferenceValue);
     }
@@ -46,30 +46,37 @@ public class ClassInfoEditor : Editor
         ////// Class Name
         GUILayout.Space(space);
         p_name.stringValue = EditorGUILayout.TextField(p_name.stringValue, bold_style);
-        ((ClassInfo)target).name = p_name.stringValue;
+        ((MinionInfo)target).name = p_name.stringValue;
         GUILayout.Space(space);
-        ////// Basic Cards
-        for (int i = 0; i < p_basic_card.arraySize; i++)
-        {
-            string temp = p_basic_card.GetArrayElementAtIndex(i).stringValue;
-            temp = EditorGUILayout.TextField(new GUIContent($"Basic Card : {i + index_offset}"), temp);
-            p_basic_card.GetArrayElementAtIndex(i).stringValue = temp;
-        }
-        GUILayout.Space(space);
-        ////// Golden Cards
-        for (int i = 0; i < p_golden_card.arraySize; i++)
-        {
-            string temp = p_golden_card.GetArrayElementAtIndex(i).stringValue;
-            temp = EditorGUILayout.TextField(new GUIContent($"Golden Card : {i + index_offset}"), temp, GUILayout.ExpandWidth(true), GUILayout.ExpandHeight(true));
-            p_golden_card.GetArrayElementAtIndex(i).stringValue = temp;
-        }
-        GUILayout.Space(space);
+
+        ///// Health
+        p_health.intValue = EditorGUILayout.IntField(new GUIContent("Health"), p_health.intValue);
+        ///// Mana
+        p_mana.intValue = EditorGUILayout.IntField(new GUIContent("Mana"), p_mana.intValue);
+        ///// Cost
+        p_cost.intValue = EditorGUILayout.IntField(new GUIContent("Cost"), p_cost.intValue);
+        ///// Minion Description
+        EditorGUILayout.BeginHorizontal();
+        GUILayout.Label(new GUIContent("Description"));
+        p_description.stringValue = GUILayout.TextArea(p_description.stringValue);
+        EditorGUILayout.EndHorizontal();
+
         ////// Apply Button
         if (GUILayout.Button(new GUIContent("Apply")))
             Save();
         EditorGUILayout.EndVertical();
 
         s_object.ApplyModifiedProperties();
+    }
+
+    private void InitializeProperties()
+    {
+        p_image = s_object.FindProperty(SPRITE_IMAGE);
+        p_name = s_object.FindProperty(NAME);
+        p_description = s_object.FindProperty(DESCRIPTION);
+        p_health = s_object.FindProperty(HEALTH);
+        p_mana = s_object.FindProperty(MANA);
+        p_cost = s_object.FindProperty(COST);
     }
 
     private void InitializeStyle()

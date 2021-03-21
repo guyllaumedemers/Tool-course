@@ -9,12 +9,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a8d3eec44572acb4c8baad0e37b2b730, type: 3}
-  m_Name: Edwin
+  m_Script: {fileID: 11500000, guid: aaf122874b178f44aa8a213c73c14eea, type: 3}
+  m_Name: Fireball
   m_EditorClassIdentifier: 
-  image: {fileID: 21300000, guid: 03b263623f88ab04596718332a734a82, type: 3}
-  name: Edwin Vancleef
-  description: 'Combo : Gain +2/+2 for each other card you''ve played this turn.'
-  health: 2
-  defense: 2
+  image: {fileID: 21300000, guid: 3af009f60f6a5ae448f969bf24f76ef8, type: 3}
+  name: Fireball
+  description: Deal 6 damage.
   cost: 4
