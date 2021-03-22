@@ -9,11 +9,21 @@ public class PoolPreviewWindow : EditorWindow
 {
     readonly string COLLECTION_PATH = "Assets/Resources/ScriptableObjects";
     readonly string ICON_PATH = "Assets/Resources/Sprites/ScriptableAsset/Icons/icon.png";
+    readonly string PREFIX = "Assets/Resources/";
     Object buttonPreview;
     Texture texture;
     bool isActive = false;
     string selection_path = null;
+    string activeFolder = null;
     Vector2 scrollview;
+
+    Dictionary<string, System.Type> keyValuePairs = new Dictionary<string, System.Type>()
+    {
+        { "Classes", typeof(ClassInfo) },
+        { "Minions", typeof(MinionInfo) },
+        { "Spells", typeof(MagicCardInfo) }
+    };
+
 
     [MenuItem("Custom Windows/ScriptablePool")]
     public static void OpenWindow()
@@ -25,6 +35,7 @@ public class PoolPreviewWindow : EditorWindow
     {
         scrollview = new Vector2();
         isActive = false;
+        activeFolder = null;
     }
 
     private void OnGUI()
@@ -50,6 +61,7 @@ public class PoolPreviewWindow : EditorWindow
                 ///// if button is clicked, display the content of the button selection
                 selection_path = $"ScriptableObjects/{folder_name}/";
                 isActive = true;
+                activeFolder = folder_name;
             }
             GUILayout.Label(folder_name);
             EditorGUILayout.EndVertical();
@@ -69,10 +81,10 @@ public class PoolPreviewWindow : EditorWindow
             }
 
             EditorGUILayout.EndHorizontal();
-            System.Type myType = System.Type.GetType("");
+            System.Type myType = keyValuePairs[activeFolder];
 
             if (GUILayout.Button(new GUIContent("+")))
-                CreateNewAsset(myType, null);
+                CreateNewAsset(myType, selection_path);
             EditorGUILayout.EndScrollView();
         }
         EditorGUILayout.EndVertical();
@@ -90,6 +102,10 @@ public class PoolPreviewWindow : EditorWindow
 
     private void CreateNewAsset(System.Type type, string selectionPath)
     {
+        ScriptableObject scriptableObject = ScriptableObject.CreateInstance(type.ToString());
+        AssetDatabase.CreateAsset(scriptableObject, PREFIX + selectionPath + "newAsset.asset");
+        AssetDatabase.SaveAssets();
 
+        Selection.activeObject = scriptableObject;
     }
 }
