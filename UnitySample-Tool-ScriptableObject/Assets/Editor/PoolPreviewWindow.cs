@@ -12,10 +12,10 @@ public class PoolPreviewWindow : EditorWindow
     readonly string PREFIX = "Assets/Resources/";
     Object buttonPreview;
     Texture texture;
-    bool isActive = false;
-    string selection_path = null;
-    string activeFolder = null;
     Vector2 scrollview;
+    bool isActive;
+    string selection_path;
+    string activeFolder;
 
     Dictionary<string, System.Type> keyValuePairs = new Dictionary<string, System.Type>()
     {
@@ -34,6 +34,7 @@ public class PoolPreviewWindow : EditorWindow
     private void OnEnable()
     {
         scrollview = new Vector2();
+        selection_path = null;
         isActive = false;
         activeFolder = null;
     }
