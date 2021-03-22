@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aaf122874b178f44aa8a213c73c14eea, type: 3}
   m_Name: Arcane Breath
   m_EditorClassIdentifier: 
+  flag: 0
   image: {fileID: 21300000, guid: 39ea5fed32270b54caa75241fc9808e8, type: 3}
   name: Arcane Breath
   description: Deal 2 damage to a minion. If you're holding a Dragon, Discover a

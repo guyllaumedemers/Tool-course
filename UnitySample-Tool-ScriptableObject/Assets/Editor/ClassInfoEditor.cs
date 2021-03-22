@@ -111,6 +111,6 @@ public class ClassInfoEditor : Editor
 
     private void Save()
     {
-        Debug.Log("ScriptableObject saved");
+        Debug.Log("ScriptableObject already marked dirty and saved");
     }
 }
