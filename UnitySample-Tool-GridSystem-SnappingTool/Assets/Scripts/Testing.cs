@@ -30,8 +30,8 @@ public class Testing : MonoBehaviour
         if (camera == null || gridSystem == null || value < 0)
             return;
         var mouse = Input.mousePosition;
-        mouse.z = 90;
-        gridSystem.SetTextValueOnMouseButtonDown(Utilities.ScreenToWorld(camera, mouse), value);
+        mouse.z = camera.transform.position.y;
+        gridSystem.SetTextValueOnMouseButtonDown(Utilities.ScreenToWorldRayCast3D(camera, mouse), value);
     }
 
     private void SetGridObjectOnClick(Camera camera, GridSystem gridSystem, int value)
@@ -39,7 +39,7 @@ public class Testing : MonoBehaviour
         if (camera == null || gridSystem == null || value < 0)
             return;
         var mouse = Input.mousePosition;
-        mouse.z = 90;
-        gridSystem.SetGridObjectOnMouseButtonDown(Utilities.ScreenToWorld(camera, mouse), gridObject, value);
+        mouse.z = camera.transform.position.y;
+        gridSystem.SetGridObjectOnMouseButtonDown(Utilities.ScreenToWorldRayCast3D(camera, mouse), gridObject, value);
     }
 }

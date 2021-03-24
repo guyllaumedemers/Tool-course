@@ -12,6 +12,7 @@ public class GridSystem
     private int[,] gridArr;
     private TextMeshPro[,] textMeshPros;
     private GridObject[,] gridObjects;
+    private HashSet<GridObject> instances;
     private Vector3 origin;
 
     public GridSystem(int myWidth, int myHeight, int sizeCell, Vector3 myOrigin)
@@ -83,9 +84,11 @@ public class GridSystem
         gridArr[i_index, j_index] = value;
         textMeshPros[i_index, j_index].text = gridArr[i_index, j_index].ToString();
         /////// we first have to instanciate the gameobject holding the GridObject
-        GridObject myGridObjectInstance = GameObject.Instantiate(selection, null);
+        GridObject myGridObjectInstance = GameObject.Instantiate<GridObject>(selection, null);
         /////// the gridObject have to be updated so it can retrive the position of the index clicked by the mouse
         gridObjects[i_index, j_index] = UpdateGridObjectValues(myGridObjectInstance, Utilities.CellIndexToWorldPosition(i_index, j_index, origin, cellsize));
+        /////// add the gridObject to the Hashset so we can easily retrieve its position and remove from hashset when needed
+        instances.Add(myGridObjectInstance);
     }
 
     public void SetGridObjectOnMouseButtonDown(Vector3 worldPosition, GridObject selection, int value)

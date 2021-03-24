@@ -5,9 +5,18 @@ using UnityEngine;
 
 public static class Utilities
 {
-    public static Vector3 ScreenToWorld(Camera camera, Vector3 screenPos)
+    public static Vector3 ScreenToWorld2D(Camera camera, Vector3 screenPos)
     {
         return camera.ScreenToWorldPoint(screenPos);
+    }
+
+    public static Vector3 ScreenToWorldRayCast3D(Camera camera, Vector3 screenPos)
+    {
+        if (Physics.Raycast(camera.ScreenPointToRay(screenPos), out RaycastHit rc))
+        {
+            return rc.point;
+        }
+        return new Vector3();
     }
 
     public static Vector3 CellIndexToWorldPosition(int i_index, int j_index, Vector3 origin, int scale)
