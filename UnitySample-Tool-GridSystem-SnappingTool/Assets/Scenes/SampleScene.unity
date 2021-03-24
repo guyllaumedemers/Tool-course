@@ -262,6 +262,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dccde94dad40dc844a349752cc8958d8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  gridObject: {fileID: 3414196470624035384, guid: 5a59551a6cb60e84bae4060875fc90ab, type: 3}
   plane: {fileID: 174938255}
 --- !u!1 &705507993
 GameObject:

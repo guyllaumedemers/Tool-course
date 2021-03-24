@@ -10,12 +10,12 @@ public static class Utilities
         return camera.ScreenToWorldPoint(screenPos);
     }
 
-    public static Vector3 SetCellPosition(int i_index, int j_index, Vector3 origin, int scale)
+    public static Vector3 CellIndexToWorldPosition(int i_index, int j_index, Vector3 origin, int scale)
     {
         return new Vector3(i_index, 0, j_index) * scale + origin;
     }
 
-    public static Vector3 WorldToCellIndex(Vector3 worldPos, int scale)
+    public static Vector3 WorldPositionToCellIndex(Vector3 worldPos, int scale)
     {
         return worldPos / scale;
     }
