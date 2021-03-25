@@ -12,7 +12,6 @@ public class GridSystem
     private int[,] gridArr;
     private TextMeshPro[,] textMeshPros;
     private GridObject[,] gridObjects;
-    private HashSet<GridObject> instances;
     private Vector3 origin;
 
     public GridSystem(int myWidth, int myHeight, int sizeCell, Vector3 myOrigin)
@@ -76,25 +75,25 @@ public class GridSystem
         return selection;
     }
 
-    private void SetGridObjectValue(int i_index, int j_index, GridObject selection, int value)
+    private GridObject SetGridObjectValue(int i_index, int j_index, GridObject selection, int value)
     {
         if (i_index < 0 || i_index > width || j_index < 0 || j_index > height)
-            return;
+            return null;
         /////// we set the value of the gridArr when adding an GridObject at index so we can later retrieve if the index = 1 | 0 
         gridArr[i_index, j_index] = value;
         textMeshPros[i_index, j_index].text = gridArr[i_index, j_index].ToString();
         /////// we first have to instanciate the gameobject holding the GridObject
         GridObject myGridObjectInstance = GameObject.Instantiate<GridObject>(selection, null);
         /////// the gridObject have to be updated so it can retrive the position of the index clicked by the mouse
-        gridObjects[i_index, j_index] = UpdateGridObjectValues(myGridObjectInstance, Utilities.CellIndexToWorldPosition(i_index, j_index, origin, cellsize));
-        /////// add the gridObject to the Hashset so we can easily retrieve its position and remove from hashset when needed
-        instances.Add(myGridObjectInstance);
+        if (myGridObjectInstance != null)
+            gridObjects[i_index, j_index] = UpdateGridObjectValues(myGridObjectInstance, Utilities.CellIndexToWorldPosition(i_index, j_index, origin, cellsize));
+        return gridObjects[i_index, j_index];
     }
 
-    public void SetGridObjectOnMouseButtonDown(Vector3 worldPosition, GridObject selection, int value)
+    public GridObject SetGridObjectOnMouseButtonDown(Vector3 worldPosition, GridObject selection, int value)
     {
         float x = 0, z = 0;
         GetXY(worldPosition, ref x, ref z);
-        SetGridObjectValue((int)x, (int)z, selection, value);
+        return SetGridObjectValue((int)x, (int)z, selection, value);
     }
 }

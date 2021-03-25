@@ -230,7 +230,7 @@ GameObject:
   - component: {fileID: 384751786}
   - component: {fileID: 384751787}
   m_Layer: 0
-  m_Name: GameObject
+  m_Name: Grid Building System
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -264,6 +264,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gridObject: {fileID: 3414196470624035384, guid: 5a59551a6cb60e84bae4060875fc90ab, type: 3}
   plane: {fileID: 174938255}
+  height: 0
+  width: 1
 --- !u!1 &705507993
 GameObject:
   m_ObjectHideFlags: 0

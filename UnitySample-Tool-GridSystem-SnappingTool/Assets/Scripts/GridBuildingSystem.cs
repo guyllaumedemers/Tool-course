@@ -2,19 +2,19 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Testing : MonoBehaviour
+public class GridBuildingSystem : MonoBehaviour
 {
     public GridObject gridObject;
+    public GridSystem gridSystem;
     public Transform plane;
-    GridSystem gridSystem;
-    int height;
-    int width;
+    public int height;
+    public int width;
+    private HashSet<GridObject> instances;
 
     void Start()
     {
-        height = (int)plane.localScale.z;
-        width = (int)plane.localScale.x;
         gridSystem = new GridSystem(width, height, 10, new Vector3(-width * 0.5f, 0, -height * 0.5f));
+        instances = new HashSet<GridObject>();
     }
 
     private void Update()
@@ -22,7 +22,7 @@ public class Testing : MonoBehaviour
         if (Input.GetMouseButtonDown(0))
             SetGridValueOnClick(Camera.main, gridSystem, 56);
         if (Input.GetMouseButtonDown(1))
-            SetGridObjectOnClick(Camera.main, gridSystem, 1);
+            SetGridObjectOnClick(Camera.main, gridObject, gridSystem, 1);
     }
 
     private void SetGridValueOnClick(Camera camera, GridSystem gridSystem, int value)
@@ -34,12 +34,14 @@ public class Testing : MonoBehaviour
         gridSystem.SetTextValueOnMouseButtonDown(Utilities.ScreenToWorldRayCast3D(camera, mouse), value);
     }
 
-    private void SetGridObjectOnClick(Camera camera, GridSystem gridSystem, int value)
+    private void SetGridObjectOnClick(Camera camera, GridObject gridObject, GridSystem gridSystem, int value)
     {
         if (camera == null || gridSystem == null || value < 0)
             return;
         var mouse = Input.mousePosition;
         mouse.z = camera.transform.position.y;
-        gridSystem.SetGridObjectOnMouseButtonDown(Utilities.ScreenToWorldRayCast3D(camera, mouse), gridObject, value);
+        GridObject returnedGridObject = gridSystem.SetGridObjectOnMouseButtonDown(Utilities.ScreenToWorldRayCast3D(camera, mouse), gridObject, value);
+        if (returnedGridObject != null)
+            instances.Add(returnedGridObject);
     }
 }
