@@ -51,24 +51,24 @@ public static class Utilities
     /// <param name="worldPosition"></param>
     /// <param name="x"></param>
     /// <param name="z"></param>
-    /// <param name="size"></param>
+    /// <param name="cellsize"></param>
     /// <param name="width"></param>
     /// <param name="height"></param>
-    public static void GetXY(Vector3 worldPosition, ref float x, ref float z, int size, int width, int height)
+    public static void GetXY(Vector3 worldPosition, ref float x, ref float z, int cellsize, int width, int height)
     {
         ////// do not forget to take into account that the world position (0,0) is offset to set the grid, so pressing at 0,0 actually update its -width/2, -height/2 value
-        x = Utilities.WorldPositionToCellIndex(worldPosition, size).x + width / 2;
-        z = Utilities.WorldPositionToCellIndex(worldPosition, size).z + height / 2;
+        x = Utilities.WorldPositionToCellIndex(worldPosition, cellsize).x + width / 2;
+        z = Utilities.WorldPositionToCellIndex(worldPosition, cellsize).z + height / 2;
     }
     /// <summary>
     /// Works In parallel with the above function (KEEP PRIVATE)
     /// </summary>
     /// <param name="worldPos"></param>
-    /// <param name="scale"></param>
+    /// <param name="cellsize"></param>
     /// <returns></returns>
-    private static Vector3 WorldPositionToCellIndex(Vector3 worldPos, int scale)
+    private static Vector3 WorldPositionToCellIndex(Vector3 worldPos, int cellsize)
     {
-        return worldPos / scale;
+        return worldPos / cellsize;
     }
 
     /// <summary>
@@ -77,11 +77,11 @@ public static class Utilities
     /// <param name="i_index"></param>
     /// <param name="j_index"></param>
     /// <param name="origin"></param>
-    /// <param name="scale"></param>
+    /// <param name="cellsize"></param>
     /// <returns></returns>
-    public static Vector3 CellIndexToWorldPosition(int i_index, int j_index, Vector3 origin, int scale)
+    public static Vector3 CellIndexToWorldPosition(int i_index, int j_index, Vector3 origin, int cellsize)
     {
-        return new Vector3(i_index, 0, j_index) * scale + origin;
+        return new Vector3(i_index, 0, j_index) * cellsize + origin;
     }
 
     /// <summary>

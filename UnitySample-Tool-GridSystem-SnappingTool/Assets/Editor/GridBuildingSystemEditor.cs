@@ -16,6 +16,8 @@ public class GridBuildingSystemEditor : Editor
     int minSlider = 1;
     int maxSlider = 10;
 
+    readonly int maxPerRow = 2;
+
     private void OnEnable()
     {
         s_object = new SerializedObject(target);
@@ -42,7 +44,7 @@ public class GridBuildingSystemEditor : Editor
         foreach (GridObject gridObject in gridObjects)
         {
             ++cpt;
-            if (cpt > 2)
+            if (cpt > maxPerRow)
                 EditorGUILayout.EndHorizontal();
             Texture preview = AssetPreview.GetAssetPreview(gridObject.gameObject);
             if (GUILayout.Button(preview))

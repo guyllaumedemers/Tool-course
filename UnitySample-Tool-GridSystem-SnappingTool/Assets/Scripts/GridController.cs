@@ -29,12 +29,12 @@ public class GridController : MonoBehaviour
         if (lastGridObject != gridObject)
             ResetObjectSelected();
         ////// Rotate the building anchor position
-        ////// +
-        if (Input.GetKeyDown(KeyCode.RightBracket))
-            gridObject.UpdateAnchorRotation(dir, width, height);
         ////// -
         if (Input.GetKeyDown(KeyCode.LeftBracket))
-            gridObject.UpdateAnchorRotation(-dir, width, height);
+            gridObject.UpdateAnchorRotation(Vector3.zero, 10, width, height, -dir);
+        ////// +
+        if (Input.GetKeyDown(KeyCode.RightBracket))
+            gridObject.UpdateAnchorRotation(Vector3.zero, 10, width, height, dir);
 
         ////// Set a Numeric value at mouseposition clicked (TESTING PURPOSE)
         if (Input.GetMouseButtonDown(0))

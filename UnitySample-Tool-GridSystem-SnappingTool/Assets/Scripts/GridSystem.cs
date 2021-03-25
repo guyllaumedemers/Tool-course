@@ -84,4 +84,6 @@ public class GridSystem
         Utilities.GetXY(worldPosition, ref x, ref z, cellsize, width, height);
         return SetGridObjectValue((int)x, (int)z, selection, value);
     }
+
+    public Vector3 GetOrigin { get => origin; }
 }
