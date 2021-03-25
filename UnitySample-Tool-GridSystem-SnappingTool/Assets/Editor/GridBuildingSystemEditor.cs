@@ -9,7 +9,6 @@ public class GridBuildingSystemEditor : Editor
     SerializedObject s_object;
     SerializedProperty p_width;
     SerializedProperty p_height;
-    SerializedProperty p_gridObject;
 
     string PREFABS_PATH = "Prefabs/";
     GridObject[] gridObjects;
@@ -57,6 +56,5 @@ public class GridBuildingSystemEditor : Editor
     {
         p_width = s_object.FindProperty("width");
         p_height = s_object.FindProperty("height");
-        p_gridObject = s_object.FindProperty("gridObject");
     }
 }

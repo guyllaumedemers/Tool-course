@@ -5,11 +5,23 @@ using UnityEngine;
 
 public static class Utilities
 {
+    /// <summary>
+    /// Get WorldPos from ScreenPos (ONLY Works in 2D Space)
+    /// </summary>
+    /// <param name="camera"></param>
+    /// <param name="screenPos"></param>
+    /// <returns></returns>
     public static Vector3 ScreenToWorld2D(Camera camera, Vector3 screenPos)
     {
         return camera.ScreenToWorldPoint(screenPos);
     }
 
+    /// <summary>
+    /// Get WorldPos from ScreenPos via Raycast (Use this when working in a 3D Space)
+    /// </summary>
+    /// <param name="camera"></param>
+    /// <param name="screenPos"></param>
+    /// <returns></returns>
     public static Vector3 ScreenToWorldRayCast3D(Camera camera, Vector3 screenPos)
     {
         if (Physics.Raycast(camera.ScreenPointToRay(screenPos), out RaycastHit rc))
@@ -19,18 +31,61 @@ public static class Utilities
         return new Vector3();
     }
 
-    public static Vector3 CellIndexToWorldPosition(int i_index, int j_index, Vector3 origin, int scale)
+    /// <summary>
+    /// Get MousePos in 3D Space
+    /// </summary>
+    /// <param name="camera"></param>
+    /// <param name="inputMouse"></param>
+    /// <returns></returns>
+    public static Vector3 GetMouse3D(Camera camera, Vector3 inputMouse)
     {
-        return new Vector3(i_index, 0, j_index) * scale + origin;
+        var mouse = inputMouse;
+        ///// the z position have to be set otherwise the mouse position is always going to return the camera position and not the position clicked
+        mouse.z = camera.transform.position.y;
+        return mouse;
     }
 
-    public static Vector3 WorldPositionToCellIndex(Vector3 worldPos, int scale)
+    /// <summary>
+    /// Get Index in Grid at WorldPos selected
+    /// </summary>
+    /// <param name="worldPosition"></param>
+    /// <param name="x"></param>
+    /// <param name="z"></param>
+    /// <param name="size"></param>
+    /// <param name="width"></param>
+    /// <param name="height"></param>
+    public static void GetXY(Vector3 worldPosition, ref float x, ref float z, int size, int width, int height)
+    {
+        ////// do not forget to take into account that the world position (0,0) is offset to set the grid, so pressing at 0,0 actually update its -width/2, -height/2 value
+        x = Utilities.WorldPositionToCellIndex(worldPosition, size).x + width / 2;
+        z = Utilities.WorldPositionToCellIndex(worldPosition, size).z + height / 2;
+    }
+    /// <summary>
+    /// Works In parallel with the above function (KEEP PRIVATE)
+    /// </summary>
+    /// <param name="worldPos"></param>
+    /// <param name="scale"></param>
+    /// <returns></returns>
+    private static Vector3 WorldPositionToCellIndex(Vector3 worldPos, int scale)
     {
         return worldPos / scale;
     }
 
     /// <summary>
-    /// Create a Text Cell that is flat on the surface
+    /// Get WorldPos from Index selected
+    /// </summary>
+    /// <param name="i_index"></param>
+    /// <param name="j_index"></param>
+    /// <param name="origin"></param>
+    /// <param name="scale"></param>
+    /// <returns></returns>
+    public static Vector3 CellIndexToWorldPosition(int i_index, int j_index, Vector3 origin, int scale)
+    {
+        return new Vector3(i_index, 0, j_index) * scale + origin;
+    }
+
+    /// <summary>
+    /// Create text cell on Plane
     /// We return the TextMeshPro and store it so we have a reference to it and can update its value when selected 
     /// </summary>
     /// <param name="worldPos"></param>
