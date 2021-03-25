@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GridBuildingSystem : MonoBehaviour
+public class GridController : MonoBehaviour
 {
     public GridObject gridObject;
     public GridSystem gridSystem;
@@ -10,6 +10,7 @@ public class GridBuildingSystem : MonoBehaviour
     public int height;
     public int width;
     private HashSet<GridObject> instances;
+
 
     void Start()
     {
@@ -40,8 +41,22 @@ public class GridBuildingSystem : MonoBehaviour
             return;
         var mouse = Input.mousePosition;
         mouse.z = camera.transform.position.y;
+
         GridObject returnedGridObject = gridSystem.SetGridObjectOnMouseButtonDown(Utilities.ScreenToWorldRayCast3D(camera, mouse), gridObject, value);
         if (returnedGridObject != null)
-            instances.Add(returnedGridObject);
+            AddBuilding(returnedGridObject);
+    }
+
+    private void AddBuilding(GridObject gridObject)
+    {
+        instances.Add(gridObject);
+    }
+
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.red;
+        Mesh myMesh = gridObject.gameObject.GetComponentInChildren<MeshFilter>().sharedMesh;
+        Gizmos.DrawMesh(myMesh, Utilities.ScreenToWorldRayCast3D(Camera.main, Input.mousePosition), Quaternion.identity, new Vector3(5, 5, 5));
     }
 }

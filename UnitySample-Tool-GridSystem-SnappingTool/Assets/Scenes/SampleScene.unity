@@ -262,10 +262,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dccde94dad40dc844a349752cc8958d8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gridObject: {fileID: 3414196470624035384, guid: 5a59551a6cb60e84bae4060875fc90ab, type: 3}
+  gridObject: {fileID: 6004206879384604988, guid: 1f79a47738dd4584586ad72a019cf204, type: 3}
   plane: {fileID: 174938255}
-  height: 0
-  width: 1
+  height: 10
+  width: 10
 --- !u!1 &705507993
 GameObject:
   m_ObjectHideFlags: 0
@@ -435,8 +435,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 963194225}
-  m_LocalRotation: {x: -0.45841047, y: -0.025143027, z: 0.012875795, w: -0.8882916}
-  m_LocalPosition: {x: -0.22335635, y: 47.366936, z: -43.295963}
+  m_LocalRotation: {x: -0.57265073, y: -0.018339772, z: 0.012596653, w: -0.81949747}
+  m_LocalPosition: {x: -6.9520783, y: 52.70042, z: -21.12572}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}

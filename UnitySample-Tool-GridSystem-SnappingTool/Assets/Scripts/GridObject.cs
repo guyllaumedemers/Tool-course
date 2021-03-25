@@ -5,7 +5,7 @@ using UnityEngine;
 public class GridObject : MonoBehaviour
 {
     ////// Gameobject prefab to display the selected building
-    [SerializeField] private GameObject prefab;
+    public GameObject prefab;
     ////// Transform to assign a position for the anchor of the building when MouseButtonDown
-    [SerializeField] private Transform anchor;
+    public Transform anchor;
 }

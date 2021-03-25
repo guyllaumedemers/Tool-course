@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
-[CustomEditor(typeof(GridBuildingSystem))]
+[CustomEditor(typeof(GridController))]
 public class GridBuildingSystemEditor : Editor
 {
     SerializedObject s_object;
@@ -30,10 +30,10 @@ public class GridBuildingSystemEditor : Editor
 
         /////// create slider for width
         p_width.intValue = EditorGUILayout.IntSlider(new GUIContent("Grid Width"), p_width.intValue, minSlider, maxSlider);
-        ((GridBuildingSystem)target).width = p_width.intValue;
+        ((GridController)target).width = p_width.intValue;
         /////// create slider for height
         p_height.intValue = EditorGUILayout.IntSlider(new GUIContent("Grid Height"), p_height.intValue, minSlider, maxSlider);
-        ((GridBuildingSystem)target).height = p_height.intValue;
+        ((GridController)target).height = p_height.intValue;
 
         GUILayout.Space(20f);
 
@@ -47,7 +47,7 @@ public class GridBuildingSystemEditor : Editor
                 EditorGUILayout.EndHorizontal();
             Texture preview = AssetPreview.GetAssetPreview(gridObject.gameObject);
             if (GUILayout.Button(preview))
-                ((GridBuildingSystem)target).gridObject = gridObject;
+                ((GridController)target).gridObject = gridObject;
         }
 
         s_object.ApplyModifiedProperties();
