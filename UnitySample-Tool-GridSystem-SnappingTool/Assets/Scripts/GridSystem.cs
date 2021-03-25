@@ -77,7 +77,7 @@ public class GridSystem
 
     private GridObject SetGridObjectValue(int i_index, int j_index, GridObject selection, int value)
     {
-        if (i_index < 0 || i_index > width || j_index < 0 || j_index > height)
+        if (i_index < 0 || i_index > width || j_index < 0 || j_index > height || gridArr[i_index, j_index] != 0)
             return null;
         /////// we set the value of the gridArr when adding an GridObject at index so we can later retrieve if the index = 1 | 0 
         gridArr[i_index, j_index] = value;

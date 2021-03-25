@@ -52,7 +52,6 @@ public class GridController : MonoBehaviour
         instances.Add(gridObject);
     }
 
-
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.red;
