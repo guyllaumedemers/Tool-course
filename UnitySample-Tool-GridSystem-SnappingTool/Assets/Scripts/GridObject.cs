@@ -41,11 +41,11 @@ public class GridObject : MonoBehaviour
     public Vector3 GetAnchorRotationResult(Vector3 origin, float x, float z, float angle, float cellsize)
     {
         if (angle == 90 || angle == -270)
-            return Utilities.CellIndexToWorldPosition(origin, x, z + 1, cellsize);
+            return Utilities.CellIndexToWorldPosition(origin, x, z + anchor.localScale.z, cellsize);
         else if (angle == 270 || angle == -90)
-            return Utilities.CellIndexToWorldPosition(origin, x + 1, z, cellsize);
+            return Utilities.CellIndexToWorldPosition(origin, x + anchor.localScale.x, z, cellsize);
         else if (angle == 180 || angle == -180)
-            return Utilities.CellIndexToWorldPosition(origin, x + 1, z + 1, cellsize);
+            return Utilities.CellIndexToWorldPosition(origin, x + anchor.localScale.x, z + anchor.localScale.z, cellsize);
         else
             return Utilities.CellIndexToWorldPosition(origin, x, z, cellsize);
     }

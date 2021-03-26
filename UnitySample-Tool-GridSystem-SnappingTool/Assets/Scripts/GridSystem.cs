@@ -66,10 +66,16 @@ public class GridSystem
     {
         if (i_index < 0 || i_index > width || j_index < 0 || j_index > height || gridArr[i_index, j_index] != 0)
             return null;
+        int result = 0;
         /////// we set the value of the gridArr when adding an GridObject at index so we can later retrieve if the index = 1 | 0 
-        gridArr[i_index, j_index] = value;
-        textMeshPros[i_index, j_index].text = gridArr[i_index, j_index].ToString();
+        if (selection.anchor.localScale != Vector3.one)
+            result = SetMultipleIndexValues(i_index, j_index, selection.anchor.localScale, value);
+        else
+            SetSingleIndexValue(i_index, j_index, value);
 
+        /////// check condition when verifying all neighbors from when the scale of the grid object is bigger than 1
+        if (result != 0)
+            return null;
         /////// we first have to instanciate the gameobject holding the GridObject
         GridObject myGridObjectInstance = GameObject.Instantiate<GridObject>(selection);
 
@@ -86,6 +92,47 @@ public class GridSystem
         float x = 0, z = 0;
         Utilities.GetXY(worldPosition, ref x, ref z, cellsize, width, height);
         return SetGridObjectValue((int)x, (int)z, selection, value);
+    }
+
+    private void SetSingleIndexValue(int i_index, int j_index, int value)
+    {
+        gridArr[i_index, j_index] = value;
+        textMeshPros[i_index, j_index].text = gridArr[i_index, j_index].ToString();
+    }
+
+    private int SetMultipleIndexValues(int i_index, int j_index, Vector3 nextPos, int value)
+    {
+        int result = CheckIndexNeighbors(i_index, j_index, nextPos);
+        if (result != 0)
+            return -1;
+        else
+            AssignValuesToNeighbors(i_index, j_index, nextPos, value);
+        return 0;
+    }
+
+    private int CheckIndexNeighbors(int i_index, int j_index, Vector3 nextPos)
+    {
+        for (int i = 0; i < nextPos.x; i++)
+        {
+            for (int j = 0; j < nextPos.z; j++)
+            {
+                if (gridArr[i_index + i, j_index + j] != 0)
+                    return -1;
+            }
+        }
+        return 0;
+    }
+
+    private void AssignValuesToNeighbors(int i_index, int j_index, Vector3 nextPos, int value)
+    {
+        for (int i = 0; i < nextPos.x; i++)
+        {
+            for (int j = 0; j < nextPos.z; j++)
+            {
+                gridArr[i_index + i, j_index + j] = value;
+                textMeshPros[i_index + i, j_index + j].text = gridArr[i_index + i, j_index + j].ToString();
+            }
+        }
     }
 
     public float GetCellSize { get => cellsize; }
