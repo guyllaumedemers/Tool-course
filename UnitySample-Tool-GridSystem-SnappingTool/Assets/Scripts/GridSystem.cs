@@ -6,9 +6,9 @@ using UnityEngine;
 public class GridSystem
 {
     [Header("Informations")]
-    private int width;
-    private int height;
-    private int cellsize;
+    private float width;
+    private float height;
+    private float cellsize;
     private int[,] gridArr;
     private TextMeshPro[,] textMeshPros;
     private GridObject[,] gridObjects;
@@ -23,7 +23,6 @@ public class GridSystem
         gridObjects = new GridObject[myWidth, myHeight];
         textMeshPros = new TextMeshPro[myWidth, myHeight];
         origin = myOrigin * cellsize;
-        Vector3 myCurrentCell;
         float textoffset = cellsize * 0.5f;
 
         for (int i = 0; i < gridArr.GetLength(0); i++)
@@ -31,7 +30,7 @@ public class GridSystem
             for (int j = 0; j < gridArr.GetLength(1); j++)
             {
                 ////// Retrieve a vector3 position of specified size at index xz in the gridArray
-                myCurrentCell = Utilities.CellIndexToWorldPosition(i, j, origin, cellsize);
+                Vector3 myCurrentCell = Utilities.CellIndexToWorldPosition(origin, i, j, cellsize);
                 ////// Create a TextCell at cell position and return the MeshPro with value at gridArray index
                 textMeshPros[i, j] = Utilities.CreateTextCell(myCurrentCell, gridArr[i, j], 24, textoffset);
 
@@ -70,11 +69,15 @@ public class GridSystem
         /////// we set the value of the gridArr when adding an GridObject at index so we can later retrieve if the index = 1 | 0 
         gridArr[i_index, j_index] = value;
         textMeshPros[i_index, j_index].text = gridArr[i_index, j_index].ToString();
+
         /////// we first have to instanciate the gameobject holding the GridObject
-        GridObject myGridObjectInstance = GameObject.Instantiate<GridObject>(selection, null);
+        GridObject myGridObjectInstance = GameObject.Instantiate<GridObject>(selection);
+
         /////// the gridObject have to be updated so it can retrive the position of the index clicked by the mouse
+        Vector3 cellIndexToWorldPos = Utilities.CellIndexToWorldPosition(origin, i_index, j_index, cellsize);
+
         if (myGridObjectInstance != null)
-            gridObjects[i_index, j_index] = myGridObjectInstance.UpdateGridObjectValues(Utilities.CellIndexToWorldPosition(i_index, j_index, origin, cellsize));
+            gridObjects[i_index, j_index] = myGridObjectInstance.UpdateGridObjectValues(cellIndexToWorldPos, origin, cellsize, width, height);
         return gridObjects[i_index, j_index];
     }
 
@@ -85,5 +88,5 @@ public class GridSystem
         return SetGridObjectValue((int)x, (int)z, selection, value);
     }
 
-    public Vector3 GetOrigin { get => origin; }
+    public float GetCellSize { get => cellsize; }
 }

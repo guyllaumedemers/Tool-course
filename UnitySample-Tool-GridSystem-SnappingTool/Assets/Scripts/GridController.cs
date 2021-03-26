@@ -12,8 +12,8 @@ public class GridController : MonoBehaviour
     public int width;
     readonly int dir = 1;
     readonly int activeBuilding = 1;
+    readonly int modelScale = 125;
     private HashSet<GridObject> instances;
-
 
     void Start()
     {
@@ -31,10 +31,18 @@ public class GridController : MonoBehaviour
         ////// Rotate the building anchor position
         ////// -
         if (Input.GetKeyDown(KeyCode.LeftBracket))
-            gridObject.UpdateAnchorRotation(Vector3.zero, 10, width, height, -dir);
+            gridObject.UpdateAnchorRotation(-dir);
         ////// +
         if (Input.GetKeyDown(KeyCode.RightBracket))
-            gridObject.UpdateAnchorRotation(Vector3.zero, 10, width, height, dir);
+            gridObject.UpdateAnchorRotation(dir);
+
+        ////// Set Grid Object Scale
+        ////// +
+        if (Input.GetKeyDown(KeyCode.KeypadPlus))
+            gridObject.UpdateAnchorScale(dir);
+        ////// -
+        if (Input.GetKeyDown(KeyCode.KeypadMinus))
+            gridObject.UpdateAnchorScale(-dir);
 
         ////// Set a Numeric value at mouseposition clicked (TESTING PURPOSE)
         if (Input.GetMouseButtonDown(0))
@@ -77,8 +85,9 @@ public class GridController : MonoBehaviour
 
     private void OnDrawGizmos()
     {
-        Gizmos.color = Color.red;
-        Mesh myMesh = gridObject.gameObject.GetComponentInChildren<MeshFilter>().sharedMesh;
-        Gizmos.DrawMesh(myMesh, Utilities.ScreenToWorldRayCast3D(Camera.main, Input.mousePosition), Quaternion.identity, new Vector3(5, 5, 5));
+        Gizmos.color = Color.yellow;
+        Mesh myMesh = gridObject.GetComponentInChildren<MeshFilter>().sharedMesh;
+        myMesh.RecalculateNormals();
+        Gizmos.DrawMesh(myMesh, Utilities.ScreenToWorldRayCast3D(Camera.main, Input.mousePosition), gridObject.anchor.rotation, gridObject.anchor.localScale * modelScale);
     }
 }

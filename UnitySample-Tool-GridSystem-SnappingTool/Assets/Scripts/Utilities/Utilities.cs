@@ -54,7 +54,7 @@ public static class Utilities
     /// <param name="cellsize"></param>
     /// <param name="width"></param>
     /// <param name="height"></param>
-    public static void GetXY(Vector3 worldPosition, ref float x, ref float z, int cellsize, int width, int height)
+    public static void GetXY(Vector3 worldPosition, ref float x, ref float z, float cellsize, float width, float height)
     {
         ////// do not forget to take into account that the world position (0,0) is offset to set the grid, so pressing at 0,0 actually update its -width/2, -height/2 value
         x = Utilities.WorldPositionToCellIndex(worldPosition, cellsize).x + width / 2;
@@ -66,7 +66,7 @@ public static class Utilities
     /// <param name="worldPos"></param>
     /// <param name="cellsize"></param>
     /// <returns></returns>
-    private static Vector3 WorldPositionToCellIndex(Vector3 worldPos, int cellsize)
+    private static Vector3 WorldPositionToCellIndex(Vector3 worldPos, float cellsize)
     {
         return worldPos / cellsize;
     }
@@ -79,8 +79,9 @@ public static class Utilities
     /// <param name="origin"></param>
     /// <param name="cellsize"></param>
     /// <returns></returns>
-    public static Vector3 CellIndexToWorldPosition(int i_index, int j_index, Vector3 origin, int cellsize)
+    public static Vector3 CellIndexToWorldPosition(Vector3 origin, float i_index, float j_index, float cellsize)
     {
+        ////// dont forget to take into account the origin of the grid since its (0,0) value is moved at instanciation
         return new Vector3(i_index, 0, j_index) * cellsize + origin;
     }
 
@@ -91,7 +92,7 @@ public static class Utilities
     /// <param name="worldPos"></param>
     /// <param name="textsize"></param>
     /// <returns></returns>
-    public static TextMeshPro CreateTextCell(Vector3 worldPos, int textvalue, int textsize, float textOffset)
+    public static TextMeshPro CreateTextCell(Vector3 worldPos, float textvalue, float textsize, float textOffset)
     {
         GameObject gameObject = new GameObject();
         gameObject.transform.position = worldPos + new Vector3(0, 0.1f, 0);
