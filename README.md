@@ -10,7 +10,7 @@ This repository has for objective of showcasing what can be create using __Unity
 ## Content
 
 ```
-NOTE : Scripts created by myself can be found here.
+NOTE : Scripts can be found here.
 ```
 * [Tool-course/Tool-LinkedList/Tool/LinkedList](https://github.com/guyllaumedemers/Tool-course/tree/main/Tool-LinkedList/Tool-LinkedList) : LinkedList 👉 *under the name Program.cs - later repackage in a custom lib*
 * [Assets/Scripts/..](https://github.com/guyllaumedemers/Tool-course/tree/main/UnitySample-Tool-ExtensionMethods/Assets/Scripts) : Extension Methods
